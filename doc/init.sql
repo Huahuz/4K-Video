@@ -17,7 +17,7 @@ create table if not exists `video` (
 
 -- 视频图片表
 create table if not exists `video_picture` (
-	`id` bigint(20) PRIMARY KEY not null comment "图片id",
+	`id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "图片id",
 	`video_id` bigint(20) not null comment "关联的视频id",
 	`name` varchar(100) not null comment "图片名称",
 	`url` varchar(200) not null comment "图片地址",
@@ -29,7 +29,7 @@ create table if not exists `video_picture` (
 
 -- 视频下载链接表
 create table if not exists `video_download_link` (
-	`id` bigint(20) PRIMARY KEY not null comment "下载链接id",
+	`id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "下载链接id",
 	`video_id` bigint(20) not null comment "关联的视频id",
 	`name` varchar(100) not null comment "链接名称",
 	`url` varchar(200) not null comment "链接地址",
@@ -39,7 +39,7 @@ create table if not exists `video_download_link` (
 
 -- 用户评论表
 create table if not exists `video_comment` (
-	`id` bigint(20) PRIMARY KEY not null comment "下载链接id",
+	`id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "评论id",
 	`video_id` bigint(20) not null comment "关联的视频id",
 	`user_name` varchar(100) not null comment "用户名",
 	`content` varchar(200) comment "评论内容",

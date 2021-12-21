@@ -1,85 +1,49 @@
 package com.video.entity;
 
-import java.util.Date;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+
+@Data
 public class VideoComment {
+    /**
+     * id
+     */
+
     private Long id;
 
+    /**
+     * 视频id
+     */
     private Long videoId;
 
+    /**
+     * 用户名
+     */
     private String userName;
 
+    /**
+     * 评论内容
+     */
     private String content;
 
+    /**
+     * 评分
+     */
     private Integer score;
 
-    private Date commentTime;
+    /**
+     * 评论时间
+     */
+    private LocalDateTime commentTime;
 
+    /**
+     * 是否为侵权投诉评论
+     */
     private Integer isComplaint;
 
+    /**
+     * 评论信息状态
+     */
     private Integer status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(Long videoId) {
-        this.videoId = videoId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public Date getCommentTime() {
-        return commentTime;
-    }
-
-    public void setCommentTime(Date commentTime) {
-        this.commentTime = commentTime;
-    }
-
-    public Integer getIsComplaint() {
-        return isComplaint;
-    }
-
-    public void setIsComplaint(Integer isComplaint) {
-        this.isComplaint = isComplaint;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 }

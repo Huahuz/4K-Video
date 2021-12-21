@@ -1,18 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.video.mapper.VideoCommentMapper">
-  <resultMap id="BaseResultMap" type="com.video.entity.VideoComment">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="video_id" jdbcType="BIGINT" property="videoId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="score" jdbcType="INTEGER" property="score" />
-    <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
-    <result column="is_complaint" jdbcType="INTEGER" property="isComplaint" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, video_id, user_name, content, score, comment_time, is_complaint, status
-  </sql>
+    <resultMap id="BaseResultMap" type="com.video.entity.VideoComment">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="video_id" jdbcType="BIGINT" property="videoId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+        <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime"/>
+        <result column="is_complaint" jdbcType="INTEGER" property="isComplaint"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, video_id, user_name, content, score, comment_time, is_complaint, status
+    </sql>
 
+    <insert id="add" parameterType="com.video.dto.business.VideoCommentDTO">
+        insert into video_comment(video_id, user_name, content, score, comment_time, is_complaint)
+        values (dto.videoId, dto.userName, dto.content, dto.score, dto.commentTime, dto.isComplaint);
+    </insert>
+
+    <delete id="delete">
+        delete
+        from video_comment
+        where id = #{id}
+    </delete>
+
+    <update id="switchStatus">
+        update
+            video_comment
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"></include>
+        from
+            video_comment
+        <where>
+            <if test="dto.videoId != null and dto.videoId != ''">
+                and video_id = #{dto.videoId}
+            </if>
+            <if test="dto.score != null and dto.score != ''">
+                and score = #{dto.score}
+            </if>
+            <if test="dto.beginTime != null and dto.beginTime != ''">
+                and comment_time &gt;= #{dto.beginTime}
+            </if>
+            <if test="dto.endTime != null and dto.endTime != ''">
+                and comment_time &lt;= #{dto.endTime}
+            </if>
+            <if test="dto.isComplaint != null and dto.isComplaint != ''">
+                and is_complaint = #{dto.isComplaint}
+            </if>
+        </where>
+        order by
+            is_complaint desc, comment_time desc
+        <if test="dto.startIdx != null and dto.size != null">
+            limit #{startIdx}, #{size}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            video_comment
+        <where>
+            <if test="dto.videoId != null and dto.videoId != ''">
+                and video_id = #{dto.videoId}
+            </if>
+            <if test="dto.score != null and dto.score != ''">
+                and score = #{dto.score}
+            </if>
+            <if test="dto.beginTime != null and dto.beginTime != ''">
+                and comment_time &gt;= #{dto.beginTime}
+            </if>
+            <if test="dto.endTime != null and dto.endTime != ''">
+                and comment_time &lt;= #{dto.endTime}
+            </if>
+            <if test="dto.isComplaint != null and dto.isComplaint != ''">
+                and is_complaint = #{dto.isComplaint}
+            </if>
+        </where>
+        order by
+        is_complaint desc, comment_time desc
+        <if test="dto.startIdx != null and dto.size != null">
+            limit #{startIdx}, #{size}
+        </if>
+    </select>
 </mapper>

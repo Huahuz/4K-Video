@@ -48,13 +48,32 @@
             <version>5.1.49</version>
         </dependency>
 
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- apache工具处理类 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
         <repository>
             <id>alimaven</id>
             <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
