@@ -80,7 +80,7 @@ public class CommentController {
      * @return 查询结果
      */
     @PostMapping("/list")
-    public ResponseResult<Object> list(@RequestBody VideoCommentDTO commentDTO) {
+    public ResponseResult<Page<List<VideoCommentDTO>>> list(@RequestBody VideoCommentDTO commentDTO) {
         try {
             // 统计数据总量
             int count = commentService.count(commentDTO);

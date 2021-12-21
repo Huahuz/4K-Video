@@ -37,13 +37,15 @@ public interface VideoCommentMapper {
      * 根据条件查询评论列表
      * @param commentDTO 筛选条件
      * @return 查询结果
+     * @throws SQLException sql异常
      */
-    List<VideoComment> list(@Param("dto") VideoCommentDTO commentDTO);
+    List<VideoComment> list(@Param("dto") VideoCommentDTO commentDTO) throws SQLException;
 
     /**
      * 根据条件查询统计评论数量
      * @param commentDTO 筛选条件
      * @return 统计结果
+     * @throws SQLException sql异常
      */
-    int count(@Param("dto") VideoCommentDTO commentDTO);
+    int count(@Param("dto") VideoCommentDTO commentDTO) throws SQLException;
 }

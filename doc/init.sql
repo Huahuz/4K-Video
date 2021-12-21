@@ -1,6 +1,7 @@
 use 4k_video;
 
 -- 视频表
+drop table if exists `video`;
 create table if not exists `video` (
 	`id` BIGINT(20) PRIMARY KEY not null COMMENT "视频记录id",
 	`name` varchar(100) not null COMMENT "视频名称",
@@ -16,6 +17,7 @@ create table if not exists `video` (
 ) engine=InnoDB;
 
 -- 视频图片表
+drop table if exists `video_picture`;
 create table if not exists `video_picture` (
 	`id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "图片id",
 	`video_id` bigint(20) not null comment "关联的视频id",
@@ -28,6 +30,7 @@ create table if not exists `video_picture` (
 ) engine=InnoDB;
 
 -- 视频下载链接表
+drop table if exists `video_download_link`;
 create table if not exists `video_download_link` (
 	`id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "下载链接id",
 	`video_id` bigint(20) not null comment "关联的视频id",
@@ -38,6 +41,7 @@ create table if not exists `video_download_link` (
 ) engine=InnoDB;
 
 -- 用户评论表
+drop table if exists `video_comment`;
 create table if not exists `video_comment` (
 	`id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "评论id",
 	`video_id` bigint(20) not null comment "关联的视频id",
@@ -48,3 +52,14 @@ create table if not exists `video_comment` (
 	`is_complaint` int not null default 0 comment "是否为投诉建议0否，1是",
 	`status` int not null default 0 comment "链接状态，未发布、已发布、已受理"
 ) engine=InnoDB;
+
+-- 视频过滤配置表
+drop table if exists `video_filter_cfg`;
+create table if not exists `video_filter_cfg` (
+    `id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "类型id",
+    `parent_id` bigint(20) comment "父类型id",
+    `key` varchar(50) not null comment "类型键",
+    `value` varchar(50) not null comment "类型值",
+    `order_no` int not null default 0 comment "类型顺序，默认为0，0-n升序排列",
+    `is_type` int not null default 0 comment "是否为类型配置项，此字段只给父类型使用，0否 1是"
+)
