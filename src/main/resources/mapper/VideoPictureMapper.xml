@@ -15,4 +15,61 @@
     id, video_id, name, url, thumbnails_url, order_no, create_time, update_time
   </sql>
 
+  <insert id="add" parameterType="com.video.entity.VideoPicture">
+    insert into video_picture(video_id, name, url, thumbnails_url, order_no, create_time, update_time)
+    values(vpi.videoId, vpi.name, vpi.url, vpi.thumbnailsUrl, vpi.orderNo, vpi.createTime, vpi.updateTime)
+  </insert>
+
+  <update id="update">
+    update video_picture
+    set video_id=#{vpi.videoId}, name=#{videoPicture.name}, url=#{vpi.url}, thumbnails_url=#{vpi.thumbnailsUrl},
+        order_no=#{vpi.orderNo}, create_time=#{vpi.createTime}, update_time=#{vpi.updateTime}
+    where id=#{id}
+  </update>
+
+
+  <select id="findByCondition">
+    select
+        <include refid="Base_Column_List"></include>
+    from video_picture
+    <where>
+    <if test="vpi.videoId!='null' and vpi.videoId!=''">
+      and video_id=#{vpi.videoId}
+    </if>
+    <if test="vpi.name!='null' and vpi.name!=''">
+      and name=#{vpi.name}
+    </if>
+    <if test="vpi.url!='null' and vpi.url!=''">
+      and url=#{vpi.url}
+    </if>
+    <if test="vpi.thumbnails_url!='null' and vpi.thumbnails_url!=''">
+      and thumbnails_url=#{vpi.thumbnails_url}
+    </if>
+    <if test="vpi.createTime!='null' and vpi.createTime!=''">
+      and create_time=#{vpi.createTime}
+    </if>
+    <if test="vpi.updateTime!='null' and vpi.updateTime!=''">
+      and update_time=#{vpi.updateTime}
+    </if>
+
+
+    </where>
+  </select>
+
+
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from video_picture where id=#{id}
+  </delete>
+
+
+  <delete id="deleteMore" parameterType="list">
+    delete from video_picture
+    <where>
+    <foreach collection="list" open="id in("  close=")" item="id" separator=",">
+      #{id}
+    </foreach>
+    </where>
+  </delete>
+
+
 </mapper>
