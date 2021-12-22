@@ -35,13 +35,15 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="Video" tableName="video" enableCountByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" enableUpdateByExample="false"/>
-        <table schema="VideoPicture" tableName="video_picture" enableCountByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" enableUpdateByExample="false"/>
-        <table schema="VideoDownloadLink" tableName="video_download_link" enableCountByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" enableUpdateByExample="false"/>
-        <table schema="VideoComment" tableName="video_comment" enableCountByExample="false" enableDeleteByExample="false"
+<!--        <table schema="Video" tableName="video" enableCountByExample="false" enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
+<!--        <table schema="VideoPicture" tableName="video_picture" enableCountByExample="false" enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
+<!--        <table schema="VideoDownloadLink" tableName="video_download_link" enableCountByExample="false" enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
+<!--        <table schema="VideoComment" tableName="video_comment" enableCountByExample="false" enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
+        <table schema="videoFilterCfg" tableName="video_filter_cfg" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>

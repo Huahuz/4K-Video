@@ -1,7 +1,9 @@
 package com.video.util;
 
 import com.video.dto.business.VideoCommentDTO;
+import com.video.dto.business.VideoFilterCfgDTO;
 import com.video.entity.VideoComment;
+import com.video.entity.VideoFilterCfg;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
@@ -33,6 +35,28 @@ public interface TransformUtil {
                     .commentTime(comment.getCommentTime())
                     .isComplaint(comment.getIsComplaint())
                     .status(comment.getStatus())
+                    .build());
+
+        }
+        return dtoList;
+    }
+
+    /**
+     * 将过滤项配置实体类转换为传输类
+     *
+     * @param configs 评论实体
+     * @return 传输类
+     */
+    static List<VideoFilterCfgDTO> configTransformDTO(List<VideoFilterCfg> configs) {
+        List<VideoFilterCfgDTO> dtoList = Lists.newArrayList();
+        for (VideoFilterCfg config : configs) {
+            dtoList.add(VideoFilterCfgDTO.builder()
+                    .id(config.getId().toString())
+                    .parentId(config.getParentId().toString())
+                    .key(config.getKey())
+                    .value(config.getValue())
+                    .orderNo(config.getOrderNo())
+                    .isType(config.getIsType())
                     .build());
 
         }

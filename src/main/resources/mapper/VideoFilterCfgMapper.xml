@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.video.mapper.VideoFilterCfgMapper">
+    <resultMap id="BaseResultMap" type="com.video.entity.VideoFilterCfg">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="key" jdbcType="VARCHAR" property="key"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="order_no" jdbcType="INTEGER" property="orderNo"/>
+        <result column="is_type" jdbcType="INTEGER" property="isType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, parent_id, key, value, order_no, is_type
+    </sql>
+
+    <insert id="add" parameterType="com.video.dto.business.VideoFilterCfgDTO">
+        insert into
+            video_filter_cfg(parent_id, key, value, order_no, is_type)
+        values
+            (dto.parentId, dto.key, dto.value, dto.orderNo, dto.isType);
+    </insert>
+
+    <update id="updateById" parameterType="com.video.dto.business.VideoFilterCfgDTO">
+        update
+            video_filter_cfg
+        set
+            `value` = #{dto.value}, order_no = #{orderNo}, parent_id = #{parentId}
+        where
+            id = #{id}
+    </update>
+
+    <select id="getChildIdByParentId" resultType="java.lang.Long">
+        select
+            id
+        from
+            video_filter_cfg
+        where
+            parent_id = #{id};
+    </select>
+
+    <delete id="deleteCfgByIds">
+        delete from
+            video_filter_cfg
+        where
+            id in <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </delete>
+
+    <select id="count" parameterType="com.video.dto.business.VideoFilterCfgDTO">
+        select
+            count(*)
+        from
+            video_filter_cfg
+        <where>
+            <if test="dto.parentId != null and dto.parentId != ''">
+                and parent_id = #{dto.parentId}
+            </if>
+            <if test="dto.isType != null and dto.isType != ''">
+                and is_type = #{dto.isType}
+            </if>
+        </where>
+        order by
+            order_no
+        <if test="dto.startIdx != null and dto.size != null">
+            limit #{dto.startIdx}, #{dto.size}
+        </if>
+    </select>
+
+    <select id="list" parameterType="com.video.dto.business.VideoFilterCfgDTO" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"></include>
+        from
+            video_filter_cfg
+        <where>
+            <if test="dto.parentId != null and dto.parentId != ''">
+                and parent_id = #{dto.parentId}
+            </if>
+            <if test="dto.isType != null and dto.isType != ''">
+                and is_type = #{dto.isType}
+            </if>
+        </where>
+        order by
+            order_no
+        <if test="dto.startIdx != null and dto.size != null">
+            limit #{dto.startIdx}, #{dto.size}
+        </if>
+    </select>
+
+</mapper>
