@@ -1,32 +1,26 @@
-package com.video.mapper;
+package com.video.service;
 
 import com.video.dto.business.VideoPictureDTO;
 import com.video.entity.VideoPicture;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Mapper
-public interface VideoPictureMapper {
-
-
+public interface VideoPictureService {
     /**
-     * 添加视频图片信息
+     * 新增视频图片
      * @param pictureDTO 视频图片信息
-     * @throws SQLException sql执行异常
      */
 
-    void add(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
+    void add(VideoPictureDTO pictureDTO) throws SQLException;
 
     /**
      * 根据id修改视频图片信息
      * @param id 要修改的视频图片id
      * @param pictureDTO 视频图片信息
-     * @throws SQLException sql执行异常
      */
-    void switchStatus(@Param("id") String id ,@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
+    void switchStatus(String id ,VideoPictureDTO pictureDTO) throws SQLException;
 
 
     /**
@@ -35,20 +29,20 @@ public interface VideoPictureMapper {
      * @throws SQLException sql执行异常
      * return 查询结果
      */
-    List<VideoPicture> list(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
-
+    List<VideoPicture> list(VideoPictureDTO pictureDTO) throws SQLException;
 
     /**
      * 根据id删除视频图片信息
      * @param id 视频图片id
      * @throws SQLException sql执行异常
      */
-    void delete(@Param("id") String id) throws SQLException;
+    void delete(String id) throws SQLException;
 
     /**
      * 根据id批量删除视频图片信息
      * @param ids 视频图片id列表
      * @throws SQLException sql执行异常
      */
-    void deleteMore(@Param("ids") List<String> ids) throws SQLException;
+    void deleteMore(List<String> ids) throws SQLException;
+
 }
