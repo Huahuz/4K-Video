@@ -86,12 +86,12 @@ public class FilterConfigController {
             cfgDTO.setTotal(count);
 
             // 计算分页开始索引位置
-            int startIdx = PageUtil.computeStartIdx(cfgDTO.getPage(), cfgDTO.getSize());
+            int startIdx = PageUtil.computeStartIdx(cfgDTO.getPage(), cfgDTO.getPageSize());
             cfgDTO.setStartIdx(startIdx);
 
             // 查询数据
             List<VideoFilterCfgDTO> result = cfgService.list(cfgDTO);
-            Page<List<VideoFilterCfgDTO>> listPage = Page.pageInfo(cfgDTO.getPage(), cfgDTO.getSize(), count, result);
+            Page<List<VideoFilterCfgDTO>> listPage = Page.pageInfo(cfgDTO.getPage(), cfgDTO.getPageSize(), count, result);
             return ResponseResult.success(listPage);
         } catch (SQLException ex) {
             ex.printStackTrace();

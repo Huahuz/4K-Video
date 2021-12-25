@@ -20,17 +20,23 @@
         values (dto.videoId, dto.userName, dto.content, dto.score, dto.commentTime, dto.isComplaint);
     </insert>
 
-    <delete id="delete">
+    <delete id="deleteBatch">
         delete
         from video_comment
-        where id = #{id}
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+        </foreach>
     </delete>
 
-    <update id="switchStatus">
+    <update id="switchStatusBatch">
         update
             video_comment
         set status = #{status}
-        where id = #{id}
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </update>
 
     <select id="list" resultMap="BaseResultMap">
@@ -45,20 +51,20 @@
             <if test="dto.score != null and dto.score != ''">
                 and score = #{dto.score}
             </if>
-            <if test="dto.beginTime != null and dto.beginTime != ''">
+            <if test="dto.beginTime != null">
                 and comment_time &gt;= #{dto.beginTime}
             </if>
-            <if test="dto.endTime != null and dto.endTime != ''">
+            <if test="dto.endTime != null">
                 and comment_time &lt;= #{dto.endTime}
             </if>
-            <if test="dto.isComplaint != null and dto.isComplaint != ''">
+            <if test="dto.isComplaint != null">
                 and is_complaint = #{dto.isComplaint}
             </if>
         </where>
         order by
-            is_complaint desc, comment_time desc
-        <if test="dto.startIdx != null and dto.size != null">
-            limit #{startIdx}, #{size}
+            is_complaint desc, status asc, comment_time desc
+        <if test="dto.startIdx != null and dto.pageSize != null">
+            limit #{dto.startIdx}, #{dto.pageSize}
         </if>
     </select>
 
@@ -74,20 +80,15 @@
             <if test="dto.score != null and dto.score != ''">
                 and score = #{dto.score}
             </if>
-            <if test="dto.beginTime != null and dto.beginTime != ''">
+            <if test="dto.beginTime != null">
                 and comment_time &gt;= #{dto.beginTime}
             </if>
-            <if test="dto.endTime != null and dto.endTime != ''">
+            <if test="dto.endTime != null">
                 and comment_time &lt;= #{dto.endTime}
             </if>
-            <if test="dto.isComplaint != null and dto.isComplaint != ''">
+            <if test="dto.isComplaint != null">
                 and is_complaint = #{dto.isComplaint}
             </if>
         </where>
-        order by
-        is_complaint desc, comment_time desc
-        <if test="dto.startIdx != null and dto.size != null">
-            limit #{startIdx}, #{size}
-        </if>
     </select>
 </mapper>
