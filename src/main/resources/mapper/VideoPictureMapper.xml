@@ -15,15 +15,15 @@
     id, video_id, name, url, thumbnails_url, order_no, create_time, update_time
   </sql>
 
-  <insert id="add" parameterType="com.video.entity.VideoPicture">
-    insert into video_picture(video_id, name, url, thumbnails_url, order_no, create_time, update_time)
-    values(dto.videoId, dto.name, dto.url, dto.thumbnailsUrl, dto.orderNo, dto.createTime, dto.updateTime)
+  <insert id="add" parameterType="com.video.dto.business.VideoPictureDTO">
+    insert into video_picture(video_id, name, url, thumbnails_url, order_no)
+    values(dto.videoId, dto.name, dto.url, dto.thumbnailsUrl, dto.orderNo)
   </insert>
 
   <update id="update">
     update video_picture
     set video_id=#{dto.videoId}, name=#{dto.name}, url=#{dto.url}, thumbnails_url=#{dto.thumbnailsUrl},
-        order_no=#{dto.orderNo}, create_time=#{dto.createTime}, update_time=#{dto.updateTime}
+        order_no=#{dto.orderNo}
     where id=#{id}
   </update>
 
@@ -45,15 +45,38 @@
     <if test="dto.thumbnails_url!='null' and dto.thumbnails_url!=''">
       and thumbnails_url=#{dto.thumbnails_url}
     </if>
-    <if test="dto.createTime!='null' and dto.createTime!=''">
-      and create_time=#{dto.createTime}
-    </if>
-    <if test="dto.updateTime!='null' and dto.updateTime!=''">
-      and update_time=#{dto.updateTime}
-    </if>
-
-
     </where>
+    order by
+    create_time desc
+    <if test="dto.startIdx != null and dto.size != null">
+      limit #{startIdx}, #{size}
+    </if>
+  </select>
+
+
+  <select id="list">
+    select
+    count(*)
+    from video_picture
+    <where>
+      <if test="dto.videoId!='null' and dto.videoId!=''">
+        and video_id=#{dto.videoId}
+      </if>
+      <if test="dto.name!='null' and dto.name!=''">
+        and name=#{dto.name}
+      </if>
+      <if test="dto.url!='null' and dto.url!=''">
+        and url=#{dto.url}
+      </if>
+      <if test="dto.thumbnails_url!='null' and dto.thumbnails_url!=''">
+        and thumbnails_url=#{dto.thumbnails_url}
+      </if>
+    </where>
+    order by
+    create_time desc
+    <if test="dto.startIdx != null and dto.size != null">
+      limit #{startIdx}, #{size}
+    </if>
   </select>
 
 

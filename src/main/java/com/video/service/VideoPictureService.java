@@ -1,5 +1,6 @@
 package com.video.service;
 
+import com.video.dto.business.VideoCommentDTO;
 import com.video.dto.business.VideoPictureDTO;
 import com.video.entity.VideoPicture;
 import org.apache.ibatis.annotations.Param;
@@ -20,7 +21,7 @@ public interface VideoPictureService {
      * @param id 要修改的视频图片id
      * @param pictureDTO 视频图片信息
      */
-    void switchStatus(String id ,VideoPictureDTO pictureDTO) throws SQLException;
+    void update(String id ,VideoPictureDTO pictureDTO) throws SQLException;
 
 
     /**
@@ -29,7 +30,7 @@ public interface VideoPictureService {
      * @throws SQLException sql执行异常
      * return 查询结果
      */
-    List<VideoPicture> list(VideoPictureDTO pictureDTO) throws SQLException;
+    List<VideoPictureDTO> list(VideoPictureDTO pictureDTO) throws SQLException;
 
     /**
      * 根据id删除视频图片信息
@@ -44,5 +45,8 @@ public interface VideoPictureService {
      * @throws SQLException sql执行异常
      */
     void deleteMore(List<String> ids) throws SQLException;
+
+
+    int count(VideoPictureDTO pictureDTO) throws SQLException;
 
 }

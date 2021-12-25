@@ -4,6 +4,7 @@ import com.video.dto.business.VideoPictureDTO;
 import com.video.entity.VideoPicture;
 import com.video.mapper.VideoPictureMapper;
 import com.video.service.VideoPictureService;
+import com.video.util.TransformUtil;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -21,15 +22,15 @@ public class VideoPictureServiceImp implements VideoPictureService {
     }
 
     @Override
-    public void switchStatus(String id, VideoPictureDTO pictureDTO) throws SQLException {
-        videoPictureMapper.switchStatus(id,pictureDTO);
+    public void update(String id, VideoPictureDTO pictureDTO) throws SQLException {
+        videoPictureMapper.update(id,pictureDTO);
 
     }
 
     @Override
-    public List<VideoPicture> list(VideoPictureDTO pictureDTO) throws SQLException {
+    public List<VideoPictureDTO> list(VideoPictureDTO pictureDTO) throws SQLException {
         List<VideoPicture> list = videoPictureMapper.list(pictureDTO);
-        return list;
+        return TransformUtil.pictureTransformDTO(list);
     }
 
     @Override
@@ -41,5 +42,11 @@ public class VideoPictureServiceImp implements VideoPictureService {
     @Override
     public void deleteMore(List<String> ids) throws SQLException {
         videoPictureMapper.deleteMore(ids);
+    }
+
+    @Override
+    public int count(VideoPictureDTO pictureDTO) throws SQLException {
+        int count = videoPictureMapper.count(pictureDTO);
+        return count;
     }
 }

@@ -15,7 +15,5 @@ public interface PageUtil {
      * @param size 页面大小
      * @return 起始索引
      */
-    static int computeStartIdx(int page, int size) {
-        return 0;
-    }
+    static int computeStartIdx(int page, int size) {return page*size;}
 }

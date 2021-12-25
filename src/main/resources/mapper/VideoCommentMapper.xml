@@ -84,6 +84,7 @@
                 and is_complaint = #{dto.isComplaint}
             </if>
         </where>
+
         order by
         is_complaint desc, comment_time desc
         <if test="dto.startIdx != null and dto.size != null">

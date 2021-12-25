@@ -2,8 +2,10 @@ package com.video.util;
 
 import com.video.dto.business.VideoCommentDTO;
 import com.video.dto.business.VideoFilterCfgDTO;
+import com.video.dto.business.VideoPictureDTO;
 import com.video.entity.VideoComment;
 import com.video.entity.VideoFilterCfg;
+import com.video.entity.VideoPicture;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
@@ -62,4 +64,33 @@ public interface TransformUtil {
         }
         return dtoList;
     }
+
+
+    /**
+     * 将视频图片实体类转换为传输类
+     *
+     * @param pictures 视频图片实体
+     * @return 传输类
+     */
+    static List<VideoPictureDTO>  pictureTransformDTO(List<VideoPicture> pictures){
+        List<VideoPictureDTO> dtoList = Lists.newArrayList();
+        for (VideoPicture picture : pictures) {
+            dtoList.add(VideoPictureDTO.builder()
+                    .id(picture.getId().toString())
+                    .videoId(picture.getVideoId().toString())
+                    .name(picture.getName())
+                    .url(picture.getUrl())
+                    .thumbnailsUrl(picture.getThumbnailsUrl())
+                    .orderNo(picture.getOrderNo())
+                    .createTime(picture.getCreateTime())
+                    .updateTime(picture.getUpdateTime())
+                    .build());
+
+        }
+        return dtoList;
+
+    }
+
+
+
 }

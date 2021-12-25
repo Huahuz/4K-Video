@@ -5,7 +5,7 @@ import com.video.dto.common.PageParam;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
+import java.util.Date;
 
 
 /**
@@ -33,15 +33,14 @@ public class VideoPictureDTO extends PageParam{
     private String videoId;
 
     /**
-     *图片地址
-     */
-    private String url;
-
-    /**
      *图片名称
      */
     private String name;
 
+    /**
+     *图片地址
+     */
+    private String url;
 
     /**
      * 略缩图地址
@@ -56,12 +55,12 @@ public class VideoPictureDTO extends PageParam{
     /**
      *创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      *更新时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
 
 }
