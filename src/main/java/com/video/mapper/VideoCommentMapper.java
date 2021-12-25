@@ -20,18 +20,18 @@ public interface VideoCommentMapper {
 
     /**
      * 删除评论
-     * @param id 评论id
+     * @param ids 评论id
      * @throws SQLException sql异常
      */
-    void delete(@Param("id") String id) throws SQLException;
+    void deleteBatch(@Param("ids") String[] ids) throws SQLException;
 
     /**
      * 根据id修改评论审核状态
-     * @param id 评论id
+     * @param ids 评论id
      * @param status 评论状态
      * @throws SQLException sql异常
      */
-    void switchStatus(@Param("id") String id, @Param("status") Integer status) throws SQLException;
+    void switchStatusBatch(@Param("ids") String[] ids, @Param("status") Integer status) throws SQLException;
 
     /**
      * 根据条件查询评论列表

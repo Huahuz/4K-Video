@@ -20,7 +20,7 @@ public class Page <T> {
     /**
      * 页面大小
      */
-    private Integer size;
+    private Integer pageSize;
 
     /**
      * 总记录数
@@ -34,7 +34,7 @@ public class Page <T> {
 
     public Page(Integer page, Integer size, Integer total, T data) {
         this.page = page;
-        this.size = size;
+        this.pageSize = size;
         this.total = total;
         this.data = data;
     }
