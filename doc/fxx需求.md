@@ -17,8 +17,8 @@
       | videoId         | String  | 是       | 关联的视频id                          |
       | name            | String  | 是       | 图片名称                          |
       | url             | String  | 是       | 图片地址，默认为空               |
-      | thumbnails_url  | Integer | 是       | 略缩图地址     |
-      | order_no        | String  | 否       | 同一视频图片顺序 |
+      | thumbnailsUrl  | Integer | 是       | 略缩图地址     |
+      | orderNo        | String  | 否       | 同一视频图片顺序 |
 
     - 出参
 
@@ -47,8 +47,8 @@
       | videoId         | String  | 是       | 关联的视频id                          |
       | name            | String  | 是       | 图片名称                          |
       | url             | String  | 是       | 图片地址，默认为空               |
-      | thumbnails_url  | Integer | 是       | 略缩图地址     |
-      | order_no        | String  | 否       | 同一视频图片顺序 |
+      | thumbnailsUrl  | Integer | 是       | 略缩图地址     |
+      | orderNo        | String  | 否       | 同一视频图片顺序 |
 
     - 出参
 

@@ -54,7 +54,7 @@
   </select>
 
 
-  <select id="list">
+  <select id="count">
     select
     count(*)
     from video_picture
@@ -85,7 +85,7 @@
   </delete>
 
 
-  <delete id="deleteMore" parameterType="list">
+  <delete id="deleteBatch" parameterType="list">
     delete from video_picture
     <where>
     <foreach collection="list" open="id in("  close=")" item="id" separator=",">

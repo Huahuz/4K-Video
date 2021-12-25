@@ -5,11 +5,14 @@ import com.video.entity.VideoPicture;
 import com.video.mapper.VideoPictureMapper;
 import com.video.service.VideoPictureService;
 import com.video.util.TransformUtil;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
 
+
+@Service
 public class VideoPictureServiceImp implements VideoPictureService {
 
     @Resource
@@ -40,8 +43,8 @@ public class VideoPictureServiceImp implements VideoPictureService {
     }
 
     @Override
-    public void deleteMore(List<String> ids) throws SQLException {
-        videoPictureMapper.deleteMore(ids);
+    public void deleteBatch(List<String> ids) throws SQLException {
+        videoPictureMapper.deleteBatch(ids);
     }
 
     @Override

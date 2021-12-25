@@ -62,7 +62,7 @@ public class PictureController {
     @GetMapping("/{id}/update")
     public ResponseResult<Object> update(@RequestBody String id, @RequestBody VideoPictureDTO pictureDTO) {
         try {
-            videoPictureService.switchStatus(id, pictureDTO);
+            videoPictureService.update(id, pictureDTO);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return ResponseResult.failure();
@@ -126,10 +126,10 @@ public class PictureController {
      */
     @ApiOperation(value = "按id删除图片信息")
     @ApiImplicitParam(name = "ids", value = "视频图片id", required = true)
-    @PostMapping("/delete-more")
-    public ResponseResult<Object> deleteMore(@PathVariable List<String> ids){
+    @PostMapping("/deleteBatch/{ids}")
+    public ResponseResult<Object> deleteBatch(@PathVariable List<String> ids){
         try {
-            videoPictureService.deleteMore(ids);
+            videoPictureService.deleteBatch(ids);
         } catch (SQLException e) {
             e.printStackTrace();
             return ResponseResult.failure();

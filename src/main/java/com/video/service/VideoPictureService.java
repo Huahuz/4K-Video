@@ -44,7 +44,7 @@ public interface VideoPictureService {
      * @param ids 视频图片id列表
      * @throws SQLException sql执行异常
      */
-    void deleteMore(List<String> ids) throws SQLException;
+    void deleteBatch(List<String> ids) throws SQLException;
 
 
     int count(VideoPictureDTO pictureDTO) throws SQLException;
