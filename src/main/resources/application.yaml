@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://192.168.1.201:3306/4k_video?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
     username: root
     password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
 
 server:
   port: 8080
@@ -18,3 +18,5 @@ knife4j:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.video.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

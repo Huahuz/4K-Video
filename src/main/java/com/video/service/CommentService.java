@@ -27,6 +27,12 @@ public interface CommentService {
     void delete(String id) throws SQLException;
 
     /**
+     * 根据id删除批量评论
+     * @param ids 评论id
+     */
+    void deleteBatch(String ids) throws SQLException;
+
+    /**
      * 根据id修改评论审核状态
      * @param id 评论id
      * @param status 评论状态
@@ -46,4 +52,11 @@ public interface CommentService {
      * @return 统计结果
      */
     int count(VideoCommentDTO commentDTO) throws SQLException;
+
+    /**
+     * 根据ids批量修改评论审核状态
+     * @param ids 评论id
+     * @param status 评论状态
+     */
+    void switchStatusBatch(String ids, Integer status) throws SQLException;
 }

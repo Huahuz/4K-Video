@@ -86,12 +86,12 @@ public class PictureController {
             pictureDTO.setTotal(count);
 
             // 计算分页开始索引位置
-            int startIdx = PageUtil.computeStartIdx(pictureDTO.getPage(), pictureDTO.getSize());
+            int startIdx = PageUtil.computeStartIdx(pictureDTO.getPage(), pictureDTO.getPageSize());
             pictureDTO.setStartIdx(startIdx);
 
             // 查询数据
             List<VideoPictureDTO> result = videoPictureService.list(pictureDTO);
-            Page<List<VideoPictureDTO>> listPage = Page.pageInfo(pictureDTO.getPage(), pictureDTO.getSize(), count, result);
+            Page<List<VideoPictureDTO>> listPage = Page.pageInfo(pictureDTO.getPage(), pictureDTO.getPageSize(), count, result);
             return ResponseResult.success(listPage);
         } catch (SQLException ex) {
             ex.printStackTrace();

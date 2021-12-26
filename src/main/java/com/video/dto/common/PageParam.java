@@ -21,7 +21,7 @@ public abstract class PageParam implements Serializable {
     /**
      * 页面大小
      */
-    private Integer size = 9;
+    private Integer pageSize = 9;
 
     /**
      * 开始索引
