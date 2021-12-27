@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,12 +35,18 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(String id) throws SQLException {
-        commentMapper.delete(id);
+        deleteBatch(id);
+    }
+
+    @Override
+    public void deleteBatch(String ids) throws SQLException {
+        String[] idArr = ids.split(",");
+        commentMapper.deleteBatch(idArr);
     }
 
     @Override
     public void switchStatus(String id, Integer status) throws SQLException {
-        commentMapper.switchStatus(id, status);
+        switchStatusBatch(id, status);
     }
 
     @Override
@@ -51,5 +58,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int count(VideoCommentDTO commentDTO) throws SQLException {
         return commentMapper.count(commentDTO);
+    }
+
+    @Override
+    public void switchStatusBatch(String ids, Integer status) throws SQLException {
+        String[] idArr = ids.split(",");
+        commentMapper.switchStatusBatch(idArr, status);
     }
 }

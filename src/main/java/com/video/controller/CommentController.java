@@ -23,6 +23,7 @@ import java.util.List;
  * @since 2021/12/21 15:33
  */
 @Api(tags = "评论功能模块")
+@CrossOrigin
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -67,6 +68,24 @@ public class CommentController {
     }
 
     /**
+     * 批量删除评论方法
+     * @param ids 评论id
+     * @return 操作结果
+     */
+    @ApiOperation(value = "批量删除评论方法")
+    @ApiImplicitParam(name = "ids", value = "评论id", required = true)
+    @GetMapping("/deleteBatch/{ids}")
+    public ResponseResult<Object> deleteBatch(@PathVariable String ids) {
+        try {
+            commentService.deleteBatch(ids);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+    /**
      * 评论状态审核修改
      * @param id 评论id
      * @param status 评论状态
@@ -89,6 +108,28 @@ public class CommentController {
     }
 
     /**
+     * 批量评论状态审核修改
+     * @param ids 评论ids
+     * @param status 评论状态
+     * @return 操作结果
+     */
+    @ApiOperation(value = "批量评论状态审核修改")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "ids", value = "评论ids", required = true),
+            @ApiImplicitParam(name = "status", value = "评论状态", required = true)
+    })
+    @GetMapping("/{ids}/switch-status-batch/{status}")
+    public ResponseResult<Object> switchStatusBatch(@PathVariable String ids, @PathVariable Integer status) {
+        try {
+            commentService.switchStatusBatch(ids, status);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+    /**
      * 按条件查询评论
      * @param commentDTO 筛选条件
      * @return 查询结果
@@ -103,12 +144,12 @@ public class CommentController {
             commentDTO.setTotal(count);
 
             // 计算分页开始索引位置
-            int startIdx = PageUtil.computeStartIdx(commentDTO.getPage(), commentDTO.getSize());
+            int startIdx = PageUtil.computeStartIdx(commentDTO.getPage(), commentDTO.getPageSize());
             commentDTO.setStartIdx(startIdx);
 
             // 查询数据
             List<VideoCommentDTO> result = commentService.list(commentDTO);
-            Page<List<VideoCommentDTO>> listPage = Page.pageInfo(commentDTO.getPage(), commentDTO.getSize(), count, result);
+            Page<List<VideoCommentDTO>> listPage = Page.pageInfo(commentDTO.getPage(), commentDTO.getPageSize(), count, result);
             return ResponseResult.success(listPage);
         } catch (SQLException ex) {
             ex.printStackTrace();

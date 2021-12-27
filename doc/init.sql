@@ -61,5 +61,5 @@ create table if not exists `video_filter_cfg` (
     `key` varchar(50) not null comment "类型键",
     `value` varchar(50) not null comment "类型值",
     `order_no` int not null default 0 comment "类型顺序，默认为0，0-n升序排列",
-    `is_type` int not null default 0 comment "是否为类型配置项，此字段只给父类型使用，0否 1是"
+    `type` int comment "配置项类型，0为类型项配置 1为类别项配置 2为地区项配置"
 )
