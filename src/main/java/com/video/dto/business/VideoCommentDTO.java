@@ -1,7 +1,9 @@
 package com.video.dto.business;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.video.dto.common.PageParam;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -47,6 +49,7 @@ public class VideoCommentDTO extends PageParam {
     /**
      * 评论时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime commentTime;
 
     /**
@@ -62,11 +65,13 @@ public class VideoCommentDTO extends PageParam {
     /**
      * 开始时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime beginTime;
 
     /**
      * 结束时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime endTime;
 
 }

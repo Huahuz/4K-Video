@@ -9,6 +9,7 @@ import com.video.entity.VideoPicture;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * description: 实体转换工具类
@@ -30,7 +31,7 @@ public interface TransformUtil {
         for (VideoComment comment : comments) {
             dtoList.add(VideoCommentDTO.builder()
                     .id(comment.getId().toString())
-                    .videoId(comment.getVideoId().toString())
+                    .videoId(Objects.isNull(comment.getVideoId()) ? null : comment.getVideoId().toString())
                     .userName(comment.getUserName())
                     .content(comment.getContent())
                     .score(comment.getScore())
@@ -54,11 +55,11 @@ public interface TransformUtil {
         for (VideoFilterCfg config : configs) {
             dtoList.add(VideoFilterCfgDTO.builder()
                     .id(config.getId().toString())
-                    .parentId(config.getParentId().toString())
+                    .parentId(Objects.isNull(config.getParentId()) ? null : config.getParentId().toString())
                     .key(config.getKey())
                     .value(config.getValue())
                     .orderNo(config.getOrderNo())
-                    .isType(config.getIsType())
+                    .type(config.getType())
                     .build());
 
         }
