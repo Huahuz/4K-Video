@@ -62,4 +62,14 @@ create table if not exists `video_filter_cfg` (
     `value` varchar(50) not null comment "类型值",
     `order_no` int not null default 0 comment "类型顺序，默认为0，0-n升序排列",
     `type` int comment "配置项类型，0为类型项配置 1为类别项配置 2为地区项配置"
-)
+) engine=InnoDB;
+
+-- 系统配置表
+drop table if exists `video_sys_cfg`;
+create table if not exists `video_sys_cfg` (
+    `id` bigint(20) PRIMARY KEY AUTO_INCREMENT not null comment "系统配置id",
+    `key` varchar(50) not null comment "系统配置键",
+    `value` varchar(50) not null comment "系统配置值",
+	`status` int not null default 0 comment "配置状态0启用 1禁用",
+    `order_no` int not null default 0 comment "配置顺序，默认为0，0-n升序排列"
+) engine=InnoDB;

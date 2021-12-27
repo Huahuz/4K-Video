@@ -15,18 +15,18 @@
 
     <insert id="add" parameterType="com.video.dto.business.VideoFilterCfgDTO">
         insert into
-            video_filter_cfg(parent_id, `key`, `value`, order_no, `type`)
+            video_filter_cfg(`parent_id`, `key`, `value`, order_no, `type`)
         values
-            (dto.parentId, dto.key, dto.value, dto.orderNo, dto.type);
+            (#{dto.parentId}, #{dto.key}, #{dto.value}, #{dto.orderNo}, #{dto.type});
     </insert>
 
     <update id="updateById" parameterType="com.video.dto.business.VideoFilterCfgDTO">
         update
             video_filter_cfg
         set
-            `value` = #{dto.value}, order_no = #{orderNo}, parent_id = #{parentId}
+            `key` = #{dto.key}, `value` = #{dto.value}, order_no = #{dto.orderNo}, parent_id = #{dto.parentId}
         where
-            id = #{id}
+            id = #{dto.id}
     </update>
 
     <select id="getChildIdByParentId" resultType="java.lang.Long">
@@ -64,8 +64,6 @@
                 and `type` = #{dto.type}
             </if>
         </where>
-        order by
-            order_no
     </select>
 
     <select id="list" parameterType="com.video.dto.business.VideoFilterCfgDTO" resultMap="BaseResultMap">
@@ -88,7 +86,7 @@
             </if>
         </where>
         order by
-            order_no
+            parent_id, order_no
         <if test="dto.startIdx != null and dto.pageSize != null">
             limit #{dto.startIdx}, #{dto.pageSize}
         </if>

@@ -43,7 +43,9 @@
 <!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
 <!--        <table schema="VideoComment" tableName="video_comment" enableCountByExample="false" enableDeleteByExample="false"-->
 <!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
-        <table schema="videoFilterCfg" tableName="video_filter_cfg" enableCountByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" enableUpdateByExample="false"/>
+<!--        <table schema="videoFilterCfg" tableName="video_filter_cfg" enableCountByExample="false" enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false" enableUpdateByExample="false"/>-->
+            <table schema="videoSysCfg" tableName="video_sys_cfg" enableCountByExample="false" enableDeleteByExample="false"
+                   enableSelectByExample="false" enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>
