@@ -59,8 +59,8 @@ public class PictureController {
             @ApiImplicitParam(name = "id", value = "视频图片id", required = true),
             @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
     })
-    @GetMapping("/{id}/update")
-    public ResponseResult<Object> update(@RequestBody String id, @RequestBody VideoPictureDTO pictureDTO) {
+    @PostMapping("/{id}/update")
+    public ResponseResult<Object> update(@PathVariable String id, @RequestBody VideoPictureDTO pictureDTO) {
         try {
             videoPictureService.update(id, pictureDTO);
         } catch (SQLException exception) {
@@ -105,7 +105,7 @@ public class PictureController {
      */
     @ApiOperation(value = "按id删除图片信息")
     @ApiImplicitParam(name = "id", value = "视频图片id", required = true)
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id){
         try {
             videoPictureService.delete(id);
@@ -124,7 +124,7 @@ public class PictureController {
      */
     @ApiOperation(value = "批量删除图片信息")
     @ApiImplicitParam(name = "ids", value = "视频图片id", required = true)
-    @PostMapping("/deleteBatch/{ids}")
+    @GetMapping("/deleteBatch/{ids}")
     public ResponseResult<Object> deleteBatch(@PathVariable String ids){
         try {
             videoPictureService.deleteBatch(ids);
