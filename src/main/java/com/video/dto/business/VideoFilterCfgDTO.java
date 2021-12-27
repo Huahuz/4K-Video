@@ -42,7 +42,7 @@ public class VideoFilterCfgDTO extends PageParam {
     private Integer orderNo;
 
     /**
-     * 是否类别配置项0否 1是
+     * 配置项类型，0为类型项配置 1为类别项配置 2为地区项配置
      */
-    private Integer isType;
+    private Integer type;
 }
