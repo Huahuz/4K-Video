@@ -77,18 +77,16 @@ public class PictureController {
      * @return 查询结果
      */
     @ApiOperation(value = "按条件查询图片信息")
-    @ApiImplicitParam(name = "commentDTO", value = "筛选条件", required = true)
+    @ApiImplicitParam(name = "pictureDTO", value = "筛选条件", required = true)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoPictureDTO>>> list(@RequestBody VideoPictureDTO pictureDTO) {
         try {
             // 统计数据总量
             int count = videoPictureService.count(pictureDTO);
             pictureDTO.setTotal(count);
-
             // 计算分页开始索引位置
             int startIdx = PageUtil.computeStartIdx(pictureDTO.getPage(), pictureDTO.getPageSize());
             pictureDTO.setStartIdx(startIdx);
-
             // 查询数据
             List<VideoPictureDTO> result = videoPictureService.list(pictureDTO);
             Page<List<VideoPictureDTO>> listPage = Page.pageInfo(pictureDTO.getPage(), pictureDTO.getPageSize(), count, result);
@@ -124,10 +122,10 @@ public class PictureController {
      * @param ids 要删除的图片id列表
      * @return 查询结果
      */
-    @ApiOperation(value = "按id删除图片信息")
+    @ApiOperation(value = "批量删除图片信息")
     @ApiImplicitParam(name = "ids", value = "视频图片id", required = true)
     @PostMapping("/deleteBatch/{ids}")
-    public ResponseResult<Object> deleteBatch(@PathVariable List<String> ids){
+    public ResponseResult<Object> deleteBatch(@PathVariable String ids){
         try {
             videoPictureService.deleteBatch(ids);
         } catch (SQLException e) {

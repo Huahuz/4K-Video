@@ -17,7 +17,7 @@
 
     <insert id="add" parameterType="com.video.dto.business.VideoCommentDTO">
         insert into video_comment(video_id, user_name, content, score, comment_time, is_complaint)
-        values (dto.videoId, dto.userName, dto.content, dto.score, dto.commentTime, dto.isComplaint);
+        values (#{dto.videoId}, #{dto.userName}, #{dto.content}, #{dto.score}, #{dto.commentTime}, #{dto.isComplaint});
     </insert>
 
     <delete id="deleteBatch">
@@ -39,7 +39,7 @@
         </foreach>
     </update>
 
-    <select id="list" resultMap="BaseResultMap">
+    <select id="list" resultMap="BaseResultMap" parameterType="com.video.dto.business.VideoCommentDTO">
         select
             <include refid="Base_Column_List"></include>
         from
@@ -58,7 +58,7 @@
                 and comment_time &lt;= #{dto.endTime}
             </if>
             <if test="dto.isComplaint != null">
-                and is_complaint = #{dto.isComplaint}
+            and is_complaint = #{dto.isComplaint}
             </if>
         </where>
         order by
@@ -68,11 +68,10 @@
         </if>
     </select>
 
-    <select id="count" resultType="java.lang.Integer">
+    <select id="count" resultType="java.lang.Integer" parameterType="com.video.dto.business.VideoCommentDTO">
         select
             count(*)
-        from
-            video_comment
+        from video_comment
         <where>
             <if test="dto.videoId != null and dto.videoId != ''">
                 and video_id = #{dto.videoId}
@@ -90,8 +89,8 @@
                 and is_complaint = #{dto.isComplaint}
             </if>
         </where>
-        <if test="dto.startIdx != null and dto.size != null">
-            limit #{startIdx}, #{size}
+        <if test="dto.startIdx != null and dto.pageSize != null">
+            limit #{dto.startIdx}, #{dto.pageSize}
         </if>
     </select>
 </mapper>

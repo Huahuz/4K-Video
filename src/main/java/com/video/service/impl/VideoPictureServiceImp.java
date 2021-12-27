@@ -43,8 +43,9 @@ public class VideoPictureServiceImp implements VideoPictureService {
     }
 
     @Override
-    public void deleteBatch(List<String> ids) throws SQLException {
-        videoPictureMapper.deleteBatch(ids);
+    public void deleteBatch(String ids) throws SQLException {
+        String[] idArr = ids.split(",");
+        videoPictureMapper.deleteBatch(idArr);
     }
 
     @Override

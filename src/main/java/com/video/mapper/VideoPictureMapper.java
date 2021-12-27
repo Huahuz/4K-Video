@@ -50,7 +50,7 @@ public interface VideoPictureMapper {
      * @param ids 视频图片id列表
      * @throws SQLException sql执行异常
      */
-    void deleteBatch(@Param("ids") List<String> ids) throws SQLException;
+    void deleteBatch(@Param("ids") String[] ids) throws SQLException;
 
     /**
      * 根据条件查询视频图片的数量
