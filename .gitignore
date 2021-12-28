@@ -23,5 +23,5 @@ rebel.xml
 .idea/modules.xml
 .idea
 ## 用户配制 ##
-*.yaml
-.generator/generatorConfig.xml
+src/main/resources/generator/generatorConfig.xml
+src/main/resources/application.yaml
