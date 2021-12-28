@@ -15,57 +15,80 @@
     id, video_id, name, url, thumbnails_url, order_no, create_time, update_time
   </sql>
 
-  <insert id="add" parameterType="com.video.entity.VideoPicture">
-    insert into video_picture(video_id, name, url, thumbnails_url, order_no, create_time, update_time)
-    values(vpi.videoId, vpi.name, vpi.url, vpi.thumbnailsUrl, vpi.orderNo, vpi.createTime, vpi.updateTime)
+  <insert id="add" parameterType="com.video.dto.business.VideoPictureDTO">
+    insert into video_picture(video_id, name, url, thumbnails_url, order_no)
+    values(#{dto.videoId}, #{dto.name}, #{dto.url}, #{dto.thumbnailsUrl}, #{dto.orderNo})
   </insert>
 
   <update id="update">
     update video_picture
-    set video_id=#{vpi.videoId}, name=#{videoPicture.name}, url=#{vpi.url}, thumbnails_url=#{vpi.thumbnailsUrl},
-        order_no=#{vpi.orderNo}, create_time=#{vpi.createTime}, update_time=#{vpi.updateTime}
-    where id=#{id}
+    set video_id=#{dto.videoId}, name=#{dto.name}, url=#{dto.url}, thumbnails_url=#{dto.thumbnailsUrl},
+        order_no=#{dto.orderNo}
+    where id=#{dto.id}
   </update>
 
 
-  <select id="findByCondition">
+  <select id="list" resultMap="BaseResultMap" parameterType="com.video.dto.business.VideoPictureDTO">
     select
         <include refid="Base_Column_List"></include>
     from video_picture
     <where>
-    <if test="vpi.videoId!='null' and vpi.videoId!=''">
-      and video_id=#{vpi.videoId}
+    <if test="dto.videoId!='null' and dto.videoId!=''">
+      and video_id=#{dto.videoId}
     </if>
-    <if test="vpi.name!='null' and vpi.name!=''">
-      and name=#{vpi.name}
+    <if test="dto.name!='null' and dto.name!=''">
+      and name=#{dto.name}
     </if>
-    <if test="vpi.url!='null' and vpi.url!=''">
-      and url=#{vpi.url}
+    <if test="dto.url!='null' and dto.url!=''">
+      and url=#{dto.url}
     </if>
-    <if test="vpi.thumbnails_url!='null' and vpi.thumbnails_url!=''">
-      and thumbnails_url=#{vpi.thumbnails_url}
+    <if test="dto.thumbnailsUrl!='null' and dto.thumbnailsUrl!=''">
+      and thumbnails_url=#{dto.thumbnailsUrl}
     </if>
-    <if test="vpi.createTime!='null' and vpi.createTime!=''">
-      and create_time=#{vpi.createTime}
-    </if>
-    <if test="vpi.updateTime!='null' and vpi.updateTime!=''">
-      and update_time=#{vpi.updateTime}
-    </if>
-
-
     </where>
+    order by
+    create_time desc
+    <if test="dto.startIdx != null and dto.pageSize != null">
+      limit #{dto.startIdx}, #{dto.pageSize}
+    </if>
   </select>
 
 
-  <delete id="deleteById" parameterType="java.lang.Integer">
+  <select id="count" parameterType="com.video.dto.business.VideoPictureDTO" resultType="java.lang.Integer">
+    select
+    count(*)
+    from video_picture
+    <where>
+      <if test="dto.videoId!='null' and dto.videoId!=''">
+        and video_id=#{dto.videoId}
+      </if>
+      <if test="dto.name!='null' and dto.name!=''">
+        and name=#{dto.name}
+      </if>
+      <if test="dto.url!='null' and dto.url!=''">
+        and url=#{dto.url}
+      </if>
+      <if test="dto.thumbnailsUrl!='null' and dto.thumbnailsUrl!=''">
+        and thumbnails_url=#{dto.thumbnailsUrl}
+      </if>
+    </where>
+    order by
+    create_time desc
+    <if test="dto.startIdx != null and dto.pageSize != null">
+      limit #{dto.startIdx}, #{dto.pageSize}
+    </if>
+  </select>
+
+
+  <delete id="delete">
     delete from video_picture where id=#{id}
   </delete>
 
 
-  <delete id="deleteMore" parameterType="list">
+  <delete id="deleteBatch">
     delete from video_picture
     <where>
-    <foreach collection="list" open="id in("  close=")" item="id" separator=",">
+    <foreach collection="ids" open="id in("  close=")" item="id" separator=",">
       #{id}
     </foreach>
     </where>
