@@ -22,11 +22,10 @@ public interface VideoPictureMapper {
 
     /**
      * 根据id修改视频图片信息
-     * @param id 要修改的视频图片id
      * @param pictureDTO 视频图片信息
      * @throws SQLException sql执行异常
      */
-    void update(@Param("id") String id ,@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
+    void update(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
 
 
     /**

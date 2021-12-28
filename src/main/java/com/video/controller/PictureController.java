@@ -50,19 +50,15 @@ public class PictureController {
 
     /**
      * 视频图片信息修改
-     * @param id 图片id
      * @param pictureDTO 图片信息
      * @return 操作结果
      */
     @ApiOperation(value = "视频图片信息修改")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "视频图片id", required = true),
-            @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
-    })
-    @PostMapping("/{id}/update")
-    public ResponseResult<Object> update(@PathVariable String id, @RequestBody VideoPictureDTO pictureDTO) {
+    @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
+    @PostMapping("/update")
+    public ResponseResult<Object> update(@RequestBody VideoPictureDTO pictureDTO) {
         try {
-            videoPictureService.update(id, pictureDTO);
+            videoPictureService.update(pictureDTO);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return ResponseResult.failure();

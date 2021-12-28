@@ -3,8 +3,6 @@ package com.video.dto.business;
 
 import com.video.dto.common.PageParam;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -20,7 +18,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class VideoPictureDTO extends PageParam{
     /**
      * 图片id

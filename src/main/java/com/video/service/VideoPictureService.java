@@ -1,13 +1,16 @@
 package com.video.service;
 
-import com.video.dto.business.VideoCommentDTO;
 import com.video.dto.business.VideoPictureDTO;
-import com.video.entity.VideoPicture;
-import org.apache.ibatis.annotations.Param;
-
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * description: 图片服务接口类
+ *
+ * @author fxx
+ * @version 1.0
+ * @since 2021/12/27 16:54
+ */
 public interface VideoPictureService {
     /**
      * 新增视频图片
@@ -21,7 +24,7 @@ public interface VideoPictureService {
      * @param id 要修改的视频图片id
      * @param pictureDTO 视频图片信息
      */
-    void update(String id ,VideoPictureDTO pictureDTO) throws SQLException;
+    void update(VideoPictureDTO pictureDTO) throws SQLException;
 
 
     /**

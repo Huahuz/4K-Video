@@ -24,7 +24,7 @@
     update video_picture
     set video_id=#{dto.videoId}, name=#{dto.name}, url=#{dto.url}, thumbnails_url=#{dto.thumbnailsUrl},
         order_no=#{dto.orderNo}
-    where id=#{id}
+    where id=#{dto.id}
   </update>
 
 

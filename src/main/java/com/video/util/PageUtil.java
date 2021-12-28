@@ -1,5 +1,7 @@
 package com.video.util;
 
+import lombok.SneakyThrows;
+
 /**
  * description: 分页工具类
  *
@@ -15,6 +17,12 @@ public interface PageUtil {
      * @param size 页面大小
      * @return 起始索引
      */
-    public static int computeStartIdx(int page, int size) {
-        return (page-1)*size;}
+    @SneakyThrows
+    static int computeStartIdx(int page, int size) {
+        if (page <= 0 || size <= 0) {
+            throw new Exception("输入数据异常");
+        } else {
+            return (page - 1) * size;
+        }
+    }
 }
