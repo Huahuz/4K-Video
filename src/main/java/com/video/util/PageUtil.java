@@ -1,5 +1,7 @@
 package com.video.util;
 
+import lombok.SneakyThrows;
+
 /**
  * description: 分页工具类
  *
@@ -16,6 +18,10 @@ public interface PageUtil {
      * @return 起始索引
      */
     static int computeStartIdx(int page, int size) {
-        return 0;
+        if (page <= 0 || size <= 0) {
+            return 0;
+        } else {
+            return (page - 1) * size;
+        }
     }
 }

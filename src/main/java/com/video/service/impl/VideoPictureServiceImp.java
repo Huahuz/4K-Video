@@ -5,11 +5,19 @@ import com.video.entity.VideoPicture;
 import com.video.mapper.VideoPictureMapper;
 import com.video.service.VideoPictureService;
 import com.video.util.TransformUtil;
-
+import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * description: 图片服务接口实现类
+ *
+ * @author fxx
+ * @version 1.0
+ * @since 2021/12/27 16:54
+ */
+@Service
 public class VideoPictureServiceImp implements VideoPictureService {
 
     @Resource
@@ -22,8 +30,8 @@ public class VideoPictureServiceImp implements VideoPictureService {
     }
 
     @Override
-    public void update(String id, VideoPictureDTO pictureDTO) throws SQLException {
-        videoPictureMapper.update(id,pictureDTO);
+    public void update(VideoPictureDTO pictureDTO) throws SQLException {
+        videoPictureMapper.update(pictureDTO);
 
     }
 
@@ -40,8 +48,9 @@ public class VideoPictureServiceImp implements VideoPictureService {
     }
 
     @Override
-    public void deleteMore(List<String> ids) throws SQLException {
-        videoPictureMapper.deleteMore(ids);
+    public void deleteBatch(String ids) throws SQLException {
+        String[] idArr = ids.split(",");
+        videoPictureMapper.deleteBatch(idArr);
     }
 
     @Override

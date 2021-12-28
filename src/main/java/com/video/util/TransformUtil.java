@@ -75,7 +75,7 @@ public interface TransformUtil {
      * @param pictures 视频图片实体
      * @return 传输类
      */
-    static List<VideoPictureDTO> pictureTransformDTO(List<VideoPicture> pictures){
+    static List<VideoPictureDTO> pictureTransformDTO(List<VideoPicture> pictures) {
         List<VideoPictureDTO> dtoList = Lists.newArrayList();
         for (VideoPicture picture : pictures) {
             dtoList.add(VideoPictureDTO.builder()

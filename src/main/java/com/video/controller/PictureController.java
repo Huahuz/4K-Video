@@ -50,19 +50,15 @@ public class PictureController {
 
     /**
      * 视频图片信息修改
-     * @param id 图片id
      * @param pictureDTO 图片信息
      * @return 操作结果
      */
     @ApiOperation(value = "视频图片信息修改")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "视频图片id", required = true),
-            @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
-    })
-    @GetMapping("/{id}/update")
-    public ResponseResult<Object> update(@RequestBody String id, @RequestBody VideoPictureDTO pictureDTO) {
+    @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
+    @PostMapping("/update")
+    public ResponseResult<Object> update(@RequestBody VideoPictureDTO pictureDTO) {
         try {
-            videoPictureService.switchStatus(id, pictureDTO);
+            videoPictureService.update(pictureDTO);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return ResponseResult.failure();
@@ -77,21 +73,19 @@ public class PictureController {
      * @return 查询结果
      */
     @ApiOperation(value = "按条件查询图片信息")
-    @ApiImplicitParam(name = "commentDTO", value = "筛选条件", required = true)
+    @ApiImplicitParam(name = "pictureDTO", value = "筛选条件", required = true)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoPictureDTO>>> list(@RequestBody VideoPictureDTO pictureDTO) {
         try {
             // 统计数据总量
             int count = videoPictureService.count(pictureDTO);
             pictureDTO.setTotal(count);
-
             // 计算分页开始索引位置
-            int startIdx = PageUtil.computeStartIdx(pictureDTO.getPage(), pictureDTO.getSize());
+            int startIdx = PageUtil.computeStartIdx(pictureDTO.getPage(), pictureDTO.getPageSize());
             pictureDTO.setStartIdx(startIdx);
-
             // 查询数据
             List<VideoPictureDTO> result = videoPictureService.list(pictureDTO);
-            Page<List<VideoPictureDTO>> listPage = Page.pageInfo(pictureDTO.getPage(), pictureDTO.getSize(), count, result);
+            Page<List<VideoPictureDTO>> listPage = Page.pageInfo(pictureDTO.getPage(), pictureDTO.getPageSize(), count, result);
             return ResponseResult.success(listPage);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -107,7 +101,7 @@ public class PictureController {
      */
     @ApiOperation(value = "按id删除图片信息")
     @ApiImplicitParam(name = "id", value = "视频图片id", required = true)
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id){
         try {
             videoPictureService.delete(id);
@@ -124,12 +118,12 @@ public class PictureController {
      * @param ids 要删除的图片id列表
      * @return 查询结果
      */
-    @ApiOperation(value = "按id删除图片信息")
+    @ApiOperation(value = "批量删除图片信息")
     @ApiImplicitParam(name = "ids", value = "视频图片id", required = true)
-    @PostMapping("/delete-more")
-    public ResponseResult<Object> deleteMore(@PathVariable List<String> ids){
+    @GetMapping("/delete-batch/{ids}")
+    public ResponseResult<Object> deleteBatch(@PathVariable String ids){
         try {
-            videoPictureService.deleteMore(ids);
+            videoPictureService.deleteBatch(ids);
         } catch (SQLException e) {
             e.printStackTrace();
             return ResponseResult.failure();

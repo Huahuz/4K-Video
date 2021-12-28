@@ -22,11 +22,10 @@ public interface VideoPictureMapper {
 
     /**
      * 根据id修改视频图片信息
-     * @param id 要修改的视频图片id
      * @param pictureDTO 视频图片信息
      * @throws SQLException sql执行异常
      */
-    void update(@Param("id") String id ,@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
+    void update(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
 
 
     /**
@@ -50,7 +49,7 @@ public interface VideoPictureMapper {
      * @param ids 视频图片id列表
      * @throws SQLException sql执行异常
      */
-    void deleteMore(@Param("ids") List<String> ids) throws SQLException;
+    void deleteBatch(@Param("ids") String[] ids) throws SQLException;
 
     /**
      * 根据条件查询视频图片的数量
