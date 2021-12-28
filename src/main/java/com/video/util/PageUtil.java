@@ -17,10 +17,9 @@ public interface PageUtil {
      * @param size 页面大小
      * @return 起始索引
      */
-    @SneakyThrows
     static int computeStartIdx(int page, int size) {
         if (page <= 0 || size <= 0) {
-            throw new Exception("输入数据异常");
+            return 0;
         } else {
             return (page - 1) * size;
         }

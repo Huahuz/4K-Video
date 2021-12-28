@@ -12,16 +12,15 @@ import java.util.List;
  * @since 2021/12/27 16:54
  */
 public interface VideoPictureService {
+
     /**
      * 新增视频图片
      * @param pictureDTO 视频图片信息
      */
-
     void add(VideoPictureDTO pictureDTO) throws SQLException;
 
     /**
      * 根据id修改视频图片信息
-     * @param id 要修改的视频图片id
      * @param pictureDTO 视频图片信息
      */
     void update(VideoPictureDTO pictureDTO) throws SQLException;
@@ -49,7 +48,11 @@ public interface VideoPictureService {
      */
     void deleteBatch(String ids) throws SQLException;
 
-
+    /**
+     * 根据条件查询图片列表的数量
+     * @param pictureDTO 筛选条件
+     * @return 查询结果
+     */
     int count(VideoPictureDTO pictureDTO) throws SQLException;
 
 }

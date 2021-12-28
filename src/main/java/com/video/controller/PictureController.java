@@ -120,7 +120,7 @@ public class PictureController {
      */
     @ApiOperation(value = "批量删除图片信息")
     @ApiImplicitParam(name = "ids", value = "视频图片id", required = true)
-    @GetMapping("/deleteBatch/{ids}")
+    @GetMapping("/delete-batch/{ids}")
     public ResponseResult<Object> deleteBatch(@PathVariable String ids){
         try {
             videoPictureService.deleteBatch(ids);
