@@ -89,8 +89,5 @@
                 and is_complaint = #{dto.isComplaint}
             </if>
         </where>
-        <if test="dto.startIdx != null and dto.pageSize != null">
-            limit #{dto.startIdx}, #{dto.pageSize}
-        </if>
     </select>
 </mapper>

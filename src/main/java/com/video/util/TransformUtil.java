@@ -3,12 +3,15 @@ package com.video.util;
 import com.video.dto.business.VideoCommentDTO;
 import com.video.dto.business.VideoFilterCfgDTO;
 import com.video.dto.business.VideoPictureDTO;
+import com.video.dto.business.VideoSysCfgDTO;
 import com.video.entity.VideoComment;
 import com.video.entity.VideoFilterCfg;
 import com.video.entity.VideoPicture;
+import com.video.entity.VideoSysCfg;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * description: 实体转换工具类
@@ -30,7 +33,7 @@ public interface TransformUtil {
         for (VideoComment comment : comments) {
             dtoList.add(VideoCommentDTO.builder()
                     .id(comment.getId().toString())
-                    .videoId(comment.getVideoId().toString())
+                    .videoId(Objects.isNull(comment.getVideoId()) ? null : comment.getVideoId().toString())
                     .userName(comment.getUserName())
                     .content(comment.getContent())
                     .score(comment.getScore())
@@ -54,11 +57,11 @@ public interface TransformUtil {
         for (VideoFilterCfg config : configs) {
             dtoList.add(VideoFilterCfgDTO.builder()
                     .id(config.getId().toString())
-                    .parentId(config.getParentId().toString())
+                    .parentId(Objects.isNull(config.getParentId()) ? null : config.getParentId().toString())
                     .key(config.getKey())
                     .value(config.getValue())
                     .orderNo(config.getOrderNo())
-                    .isType(config.getIsType())
+                    .type(config.getType())
                     .build());
 
         }
@@ -72,7 +75,7 @@ public interface TransformUtil {
      * @param pictures 视频图片实体
      * @return 传输类
      */
-    static List<VideoPictureDTO>  pictureTransformDTO(List<VideoPicture> pictures){
+    static List<VideoPictureDTO> pictureTransformDTO(List<VideoPicture> pictures) {
         List<VideoPictureDTO> dtoList = Lists.newArrayList();
         for (VideoPicture picture : pictures) {
             dtoList.add(VideoPictureDTO.builder()
@@ -88,5 +91,24 @@ public interface TransformUtil {
 
         }
         return dtoList;
+    }
+
+    /**
+     * 将系统配置实体类转为传输类
+     * @param sysConfigs 系统配置类
+     * @return 传输类
+     */
+    static List<VideoSysCfgDTO> sysCfgTransformDTO(List<VideoSysCfg> sysConfigs) {
+        List<VideoSysCfgDTO> resultList = Lists.newArrayList();
+        for (VideoSysCfg sysConfig : sysConfigs) {
+            resultList.add(VideoSysCfgDTO.builder()
+                    .id(sysConfig.getId().toString())
+                    .key(sysConfig.getKey())
+                    .value(sysConfig.getValue())
+                    .status(sysConfig.getStatus())
+                    .orderNo(sysConfig.getOrderNo())
+                    .build());
+        }
+        return resultList;
     }
 }

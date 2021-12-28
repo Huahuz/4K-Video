@@ -5,6 +5,9 @@ import com.video.dto.common.Page;
 import com.video.dto.common.ResponseResult;
 import com.video.service.FilterConfigService;
 import com.video.util.PageUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +21,8 @@ import java.util.List;
  * @version 1.0
  * @since 2021/12/21 22:45
  */
+@Api(tags = "过滤项配置管理")
+@CrossOrigin
 @RestController
 @RequestMapping("/config")
 public class FilterConfigController {
@@ -30,6 +35,8 @@ public class FilterConfigController {
      * @param cfgDTO 过滤项配置信息
      * @return 操作结果
      */
+    @ApiOperation(value = "添加过滤项配置")
+    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置信息", required = true)
     @PostMapping("/add")
     public ResponseResult<Object> add(@RequestBody VideoFilterCfgDTO cfgDTO) {
         try {
@@ -46,6 +53,8 @@ public class FilterConfigController {
      * @param cfgDTO 过滤项配置信息
      * @return 操作结果
      */
+    @ApiOperation(value = "修改过滤项配置")
+    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置信息", required = true)
     @PostMapping("/update")
     public ResponseResult<Object> update(@RequestBody VideoFilterCfgDTO cfgDTO) {
         try {
@@ -58,10 +67,12 @@ public class FilterConfigController {
     }
 
     /**
-     * 修改过滤项配置
+     * 删除过滤项配置
      * @param id 过滤项配置id
      * @return 操作结果
      */
+    @ApiOperation(value = "删除过滤项配置")
+    @ApiImplicitParam(name = "id", value = "过滤项配置id", required = true)
     @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id) {
         try {
@@ -78,6 +89,8 @@ public class FilterConfigController {
      * @param cfgDTO 过滤项配置
      * @return 查询结果
      */
+    @ApiOperation(value = "按条件查询过滤项配置")
+    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置", required = true)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoFilterCfgDTO>>> list(@RequestBody VideoFilterCfgDTO cfgDTO) {
         try {

@@ -7,26 +7,26 @@
         <result column="key" jdbcType="VARCHAR" property="key"/>
         <result column="value" jdbcType="VARCHAR" property="value"/>
         <result column="order_no" jdbcType="INTEGER" property="orderNo"/>
-        <result column="is_type" jdbcType="INTEGER" property="isType"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, parent_id, key, value, order_no, is_type
+        id, parent_id, `key`, `value`, order_no, `type`
     </sql>
 
     <insert id="add" parameterType="com.video.dto.business.VideoFilterCfgDTO">
         insert into
-            video_filter_cfg(parent_id, key, value, order_no, is_type)
+            video_filter_cfg(`parent_id`, `key`, `value`, order_no, `type`)
         values
-            (dto.parentId, dto.key, dto.value, dto.orderNo, dto.isType);
+            (#{dto.parentId}, #{dto.key}, #{dto.value}, #{dto.orderNo}, #{dto.type});
     </insert>
 
     <update id="updateById" parameterType="com.video.dto.business.VideoFilterCfgDTO">
         update
             video_filter_cfg
         set
-            `value` = #{dto.value}, order_no = #{orderNo}, parent_id = #{parentId}
+            `key` = #{dto.key}, `value` = #{dto.value}, order_no = #{dto.orderNo}, parent_id = #{dto.parentId}
         where
-            id = #{id}
+            id = #{dto.id}
     </update>
 
     <select id="getChildIdByParentId" resultType="java.lang.Long">
@@ -45,7 +45,7 @@
             id in <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
     </delete>
 
-    <select id="count" parameterType="com.video.dto.business.VideoFilterCfgDTO">
+    <select id="count" parameterType="com.video.dto.business.VideoFilterCfgDTO" resultType="java.lang.Integer">
         select
             count(*)
         from
@@ -54,15 +54,16 @@
             <if test="dto.parentId != null and dto.parentId != ''">
                 and parent_id = #{dto.parentId}
             </if>
-            <if test="dto.isType != null and dto.isType != ''">
-                and is_type = #{dto.isType}
+            <if test="dto.key != null and dto.key != ''">
+                and `key` like CONCAT('%', #{dto.key} ,'%')
+            </if>
+            <if test="dto.value != null and dto.value != ''">
+                and `value` like CONCAT('%', #{dto.value} ,'%')
+            </if>
+            <if test="dto.type != null">
+                and `type` = #{dto.type}
             </if>
         </where>
-        order by
-            order_no
-        <if test="dto.startIdx != null and dto.size != null">
-            limit #{dto.startIdx}, #{dto.size}
-        </if>
     </select>
 
     <select id="list" parameterType="com.video.dto.business.VideoFilterCfgDTO" resultMap="BaseResultMap">
@@ -74,14 +75,20 @@
             <if test="dto.parentId != null and dto.parentId != ''">
                 and parent_id = #{dto.parentId}
             </if>
-            <if test="dto.isType != null and dto.isType != ''">
-                and is_type = #{dto.isType}
+            <if test="dto.key != null and dto.key != ''">
+                and `key` like CONCAT('%', #{dto.key} ,'%')
+            </if>
+            <if test="dto.value != null and dto.value != ''">
+                and `value` like CONCAT('%', #{dto.value} ,'%')
+            </if>
+            <if test="dto.type != null">
+                and `type` = #{dto.type}
             </if>
         </where>
         order by
-            order_no
-        <if test="dto.startIdx != null and dto.size != null">
-            limit #{dto.startIdx}, #{dto.size}
+            parent_id, order_no
+        <if test="dto.startIdx != null and dto.pageSize != null">
+            limit #{dto.startIdx}, #{dto.pageSize}
         </if>
     </select>
 
