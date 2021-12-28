@@ -22,6 +22,3 @@ rebel.xml
 .DS_Store
 .idea/modules.xml
 .idea
-## 用户配制 ##
-src/main/resources/generator/generatorConfig.xml
-src/main/resources/application.yaml
