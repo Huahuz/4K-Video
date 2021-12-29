@@ -11,8 +11,8 @@ create table if not exists `video` (
 	`years` int not null comment "年代，此视频的年代",
 	`status` int not null comment "状态，未发布、已发布、已冻结",
 	`summary` LONGTEXT COLLATE utf8mb4_unicode_520_ci NOT NULL comment "简要概述",
-	`create_time` datetime not null DEFAULT now() COMMENT "创建时间",
-	`update_time` datetime not null default now() comment "更新时间",
+	`create_time` datetime DEFAULT now() COMMENT "创建时间",
+	`update_time` datetime default now() comment "更新时间",
 	`comments` VARCHAR(500) COMMENT "备注说明"
 ) engine=InnoDB;
 
@@ -23,8 +23,8 @@ create table if not exists `video_picture` (
 	`video_id` bigint(20) not null comment "关联的视频id",
 	`name` varchar(100) not null comment "图片名称",
 	`url` varchar(200) not null comment "图片地址",
-	`thumbnails_url` varchar(200) not null comment "略缩图地址",
-	`order_no` int not null default 0 comment "同一视频图片顺序",
+	`thumbnails_url` varchar(200) comment "略缩图地址",
+	`order_no` int default 0 comment "同一视频图片顺序",
 	`create_time` datetime not null DEFAULT now() COMMENT "创建时间",
 	`update_time` datetime not null default now() comment "更新时间"
 ) engine=InnoDB;
@@ -36,7 +36,7 @@ create table if not exists `video_download_link` (
 	`video_id` bigint(20) not null comment "关联的视频id",
 	`name` varchar(100) not null comment "链接名称",
 	`url` varchar(200) not null comment "链接地址",
-	`order_no` int not null default 0 comment "同一视频链接顺序",
+	`order_no` int default 0 comment "同一视频链接顺序",
 	`status` int not null default 0 comment "链接状态，未发布、已发布、已冻结"
 ) engine=InnoDB;
 

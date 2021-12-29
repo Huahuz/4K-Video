@@ -93,7 +93,7 @@ public class SysConfigController {
         try {
             // 查询数据
             List<VideoSysCfgDTO> result = cfgService.list();
-            Page<List<VideoSysCfgDTO>> listPage = Page.pageInfo(0, 0, 0, result);
+            Page<List<VideoSysCfgDTO>> listPage = Page.pageInfo(0, result.size(), result.size(), result);
             return ResponseResult.success(listPage);
         } catch (SQLException ex) {
             ex.printStackTrace();
