@@ -74,7 +74,7 @@ public class CommentController {
      */
     @ApiOperation(value = "批量删除评论方法")
     @ApiImplicitParam(name = "ids", value = "评论id", required = true)
-    @GetMapping("/deleteBatch/{ids}")
+    @GetMapping("/delete-batch/{ids}")
     public ResponseResult<Object> deleteBatch(@PathVariable String ids) {
         try {
             commentService.deleteBatch(ids);
