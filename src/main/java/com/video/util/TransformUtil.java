@@ -1,13 +1,7 @@
 package com.video.util;
 
-import com.video.dto.business.VideoCommentDTO;
-import com.video.dto.business.VideoFilterCfgDTO;
-import com.video.dto.business.VideoPictureDTO;
-import com.video.dto.business.VideoSysCfgDTO;
-import com.video.entity.VideoComment;
-import com.video.entity.VideoFilterCfg;
-import com.video.entity.VideoPicture;
-import com.video.entity.VideoSysCfg;
+import com.video.dto.business.*;
+import com.video.entity.*;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
@@ -21,6 +15,25 @@ import java.util.Objects;
  * @since 2021/12/21 18:39
  */
 public interface TransformUtil {
+    /**
+     * 将下载链接实体类转为传输类
+     * @param downloadLinks 下载链接类
+     * @return 传输类
+     */
+    static List<VideoDownloadLinkDTO> downloadLinkTransformDTO(List<VideoDownloadLink> downloadLinks){
+        List<VideoDownloadLinkDTO> dtoList = Lists.newArrayList();
+        for (VideoDownloadLink downloadLink : downloadLinks) {
+            dtoList.add(VideoDownloadLinkDTO.builder()
+                    .id(downloadLink.getId().toString())
+                    .videoId(downloadLink.getVideoId().toString())
+                    .name(downloadLink.getName())
+                    .url(downloadLink.getUrl())
+                    .orderNo(downloadLink.getOrderNo())
+                    .status(downloadLink.getStatus())
+                    .build());
+        }
+        return dtoList;
+    }
 
     /**
      * 将评论实体类转换为传输类
@@ -111,4 +124,6 @@ public interface TransformUtil {
         }
         return resultList;
     }
+
+
 }

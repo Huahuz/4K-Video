@@ -22,6 +22,7 @@ import java.util.List;
  * @since 2021/12/24 15:33
  */
 @Api(tags = "视频图片功能模块")
+@CrossOrigin
 @RestController
 @RequestMapping("/picture")
 public class PictureController {
@@ -93,6 +94,34 @@ public class PictureController {
         }
 
     }
+
+
+    /**
+     * 根据name进行图谱信息的模糊查询
+     * @param pictureDTO 查询的name条件
+     * @return 操作结果
+     */
+    @ApiOperation(value = "根据名称模糊查询图片信息")
+    @ApiImplicitParam(name ="pictureDTO",value ="视频图片名称及筛选条件" ,required = true)
+    @PostMapping("/list-name")
+    public ResponseResult<Page<List<VideoPictureDTO>>> listName(@RequestBody VideoPictureDTO pictureDTO){
+        try {
+            // 统计数据总量
+            int count = videoPictureService.countName(pictureDTO);
+            pictureDTO.setTotal(count);
+            // 计算分页开始索引位置
+            int startIdx = PageUtil.computeStartIdx(pictureDTO.getPage(), pictureDTO.getPageSize());
+            pictureDTO.setStartIdx(startIdx);
+
+            List<VideoPictureDTO> result = videoPictureService.listName(pictureDTO);
+            Page<List<VideoPictureDTO>> listPage = Page.pageInfo(pictureDTO.getPage(), pictureDTO.getPageSize(), count, result);
+            return ResponseResult.success(listPage);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+    }
+
 
     /**
      * 按id删除图片信息

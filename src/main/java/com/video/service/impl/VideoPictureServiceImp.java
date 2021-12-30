@@ -42,6 +42,12 @@ public class VideoPictureServiceImp implements VideoPictureService {
     }
 
     @Override
+    public List<VideoPictureDTO> listName(VideoPictureDTO pictureDTO) throws SQLException {
+        List<VideoPicture> list = videoPictureMapper.listName(pictureDTO);
+        return TransformUtil.pictureTransformDTO(list);
+    }
+
+    @Override
     public void delete(String id) throws SQLException {
         videoPictureMapper.delete(id);
 
@@ -56,6 +62,12 @@ public class VideoPictureServiceImp implements VideoPictureService {
     @Override
     public int count(VideoPictureDTO pictureDTO) throws SQLException {
         int count = videoPictureMapper.count(pictureDTO);
+        return count;
+    }
+
+    @Override
+    public int countName(VideoPictureDTO pictureDTO) throws SQLException {
+        int count = videoPictureMapper.countName(pictureDTO);
         return count;
     }
 }

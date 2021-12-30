@@ -34,6 +34,16 @@ public interface VideoPictureService {
      */
     List<VideoPictureDTO> list(VideoPictureDTO pictureDTO) throws SQLException;
 
+
+    /**
+     * 根据名称模糊查询
+     * @param pictureDTO
+     * @return 操作结果
+     */
+    List<VideoPictureDTO> listName(VideoPictureDTO pictureDTO) throws  SQLException;
+
+
+
     /**
      * 根据id删除视频图片信息
      * @param id 视频图片id
@@ -55,4 +65,12 @@ public interface VideoPictureService {
      */
     int count(VideoPictureDTO pictureDTO) throws SQLException;
 
+
+
+    /**
+     * 根据模糊名称查询图片列表的数量
+     * @param pictureDTO 筛选条件
+     * @return 查询结果
+     */
+    int countName(VideoPictureDTO pictureDTO) throws SQLException;
 }

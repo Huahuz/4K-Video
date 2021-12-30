@@ -38,6 +38,14 @@ public interface VideoPictureMapper {
 
 
     /**
+     * 根据name进行模糊查询
+     * @param pictureDTO 输入的名称及筛选条件
+     * @return 操作结果
+     */
+    List<VideoPicture> listName(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
+
+
+    /**
      * 根据id删除视频图片信息
      * @param id 视频图片id
      * @throws SQLException sql执行异常
@@ -57,4 +65,11 @@ public interface VideoPictureMapper {
      * @throws SQLException sql执行异常
      */
     int count(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
+
+    /**
+     * 根据模糊名称条件查询视频图片的数量
+     * @param pictureDTO 筛选信息
+     * @throws SQLException sql执行异常
+     */
+    int countName(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
 }
