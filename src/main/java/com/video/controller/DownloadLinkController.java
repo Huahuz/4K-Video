@@ -49,7 +49,7 @@ public class DownloadLinkController {
     }
 
     /**
-     * 下载链接信息修改
+     * 下载链接状态修改
      * @param id 修改的id
      * @param status 修改后的状态
      * @return 操作结果
