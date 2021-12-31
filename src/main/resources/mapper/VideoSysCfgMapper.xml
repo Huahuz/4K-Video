@@ -17,6 +17,8 @@
             <include refid="Base_Column_List"></include>
         from
             video_sys_cfg
+        order by
+            order_no
     </select>
 
     <insert id="add" parameterType="com.video.dto.business.VideoSysCfgDTO">
