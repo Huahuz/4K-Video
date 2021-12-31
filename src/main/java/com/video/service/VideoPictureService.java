@@ -34,6 +34,8 @@ public interface VideoPictureService {
      */
     List<VideoPictureDTO> list(VideoPictureDTO pictureDTO) throws SQLException;
 
+
+
     /**
      * 根据id删除视频图片信息
      * @param id 视频图片id
