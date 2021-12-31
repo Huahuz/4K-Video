@@ -23,7 +23,7 @@
   <update id="update">
     update video_picture
     set video_id=#{dto.videoId}, name=#{dto.name}, url=#{dto.url}, thumbnails_url=#{dto.thumbnailsUrl},
-        order_no=#{dto.orderNo}
+        order_no=#{dto.orderNo}, update_time = now()
     where id=#{dto.id}
   </update>
 
@@ -33,21 +33,21 @@
         <include refid="Base_Column_List"></include>
     from video_picture
     <where>
-    <if test="dto.videoId!='null' and dto.videoId!=''">
+    <if test="dto.videoId!=null and dto.videoId!=''">
       and video_id=#{dto.videoId}
     </if>
-    <if test="dto.name!='null' and dto.name!=''">
-      and name=#{dto.name}
+    <if test="dto.name!=null and dto.name!=''">
+      and name like CONCAT("%",#{dto.name},"%")
     </if>
-    <if test="dto.url!='null' and dto.url!=''">
+    <if test="dto.url!=null and dto.url!=''">
       and url=#{dto.url}
     </if>
-    <if test="dto.thumbnailsUrl!='null' and dto.thumbnailsUrl!=''">
+    <if test="dto.thumbnailsUrl!=null and dto.thumbnailsUrl!=''">
       and thumbnails_url=#{dto.thumbnailsUrl}
     </if>
     </where>
     order by
-    create_time desc
+    order_no asc, create_time desc
     <if test="dto.startIdx != null and dto.pageSize != null">
       limit #{dto.startIdx}, #{dto.pageSize}
     </if>
@@ -59,26 +59,23 @@
     count(*)
     from video_picture
     <where>
-      <if test="dto.videoId!='null' and dto.videoId!=''">
+      <if test="dto.videoId!=null and dto.videoId!=''">
         and video_id=#{dto.videoId}
       </if>
-      <if test="dto.name!='null' and dto.name!=''">
-        and name=#{dto.name}
+      <if test="dto.name!=null and dto.name!=''">
+        and name like CONCAT("%",#{dto.name},"%")
       </if>
-      <if test="dto.url!='null' and dto.url!=''">
+      <if test="dto.url!=null and dto.url!=''">
         and url=#{dto.url}
       </if>
-      <if test="dto.thumbnailsUrl!='null' and dto.thumbnailsUrl!=''">
+      <if test="dto.thumbnailsUrl!=null and dto.thumbnailsUrl!=''">
         and thumbnails_url=#{dto.thumbnailsUrl}
       </if>
     </where>
-    order by
-    create_time desc
     <if test="dto.startIdx != null and dto.pageSize != null">
       limit #{dto.startIdx}, #{dto.pageSize}
     </if>
   </select>
-
 
   <delete id="delete">
     delete from video_picture where id=#{id}
@@ -93,6 +90,5 @@
     </foreach>
     </where>
   </delete>
-
 
 </mapper>

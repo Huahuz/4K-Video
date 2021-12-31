@@ -41,6 +41,7 @@ public class VideoPictureServiceImp implements VideoPictureService {
         return TransformUtil.pictureTransformDTO(list);
     }
 
+
     @Override
     public void delete(String id) throws SQLException {
         videoPictureMapper.delete(id);

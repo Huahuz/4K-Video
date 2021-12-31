@@ -22,6 +22,7 @@ import java.util.List;
  * @since 2021/12/24 15:33
  */
 @Api(tags = "视频图片功能模块")
+@CrossOrigin
 @RestController
 @RequestMapping("/picture")
 public class PictureController {
@@ -93,7 +94,6 @@ public class PictureController {
         }
 
     }
-
     /**
      * 按id删除图片信息
      * @param id 要删除的图片id

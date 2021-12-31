@@ -1,6 +1,7 @@
 package com.video.dto.business;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.video.dto.common.PageParam;
 import lombok.*;
 import java.util.Date;
@@ -52,11 +53,13 @@ public class VideoPictureDTO extends PageParam{
     /**
      *创建时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**
      *更新时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
 

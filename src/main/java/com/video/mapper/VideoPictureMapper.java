@@ -11,7 +11,6 @@ import java.util.List;
 @Mapper
 public interface VideoPictureMapper {
 
-
     /**
      * 添加视频图片信息
      * @param pictureDTO 视频图片信息
@@ -35,7 +34,6 @@ public interface VideoPictureMapper {
      * return 查询结果
      */
     List<VideoPicture> list(@Param("dto") VideoPictureDTO pictureDTO) throws SQLException;
-
 
     /**
      * 根据id删除视频图片信息
