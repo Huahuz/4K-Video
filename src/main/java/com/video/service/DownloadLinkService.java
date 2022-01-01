@@ -23,9 +23,10 @@ public interface DownloadLinkService {
 
     /**
      * 根据id修改下载连接的内容
-     * @param downloadLinkServiceDTO 下载链接信息
+     * @param id 修改的id
+     * @param status 修改后的状态
      */
-    void update(VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException;
+    void switchStatus(String id, Integer status) throws SQLException;
 
     /**
      * 根据条件查询下载链接

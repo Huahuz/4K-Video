@@ -18,10 +18,11 @@ public interface VideoDownloadLinkMapper {
 
     /**
      * 根据id修改视频下载链接
-     * @param downloadLinkServiceDTO 修改的内容
+     * @param id 修改的id
+     * @param status 修改后的状态
      * @throws SQLException sql异常
      */
-    void update(@Param("dto") VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException;
+    void switchStatus(@Param("id") String id,@Param("status") Integer status) throws SQLException;
 
     /**
      * 根据条件查询视频下载链接
