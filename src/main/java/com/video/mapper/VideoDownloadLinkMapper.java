@@ -17,14 +17,6 @@ public interface VideoDownloadLinkMapper {
     void add(@Param("dto") VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException;
 
     /**
-     * 根据id修改视频下载链接
-     * @param id 修改的id
-     * @param status 修改后的状态
-     * @throws SQLException sql异常
-     */
-    void switchStatus(@Param("id") String id,@Param("status") Integer status) throws SQLException;
-
-    /**
      * 根据条件查询视频下载链接
      * @param downloadLinkServiceDTO 筛选条件
      * @return 查询结果
@@ -54,7 +46,9 @@ public interface VideoDownloadLinkMapper {
      */
     void deleteBatch(@Param("ids") String[] ids) throws SQLException;
 
-
-
-
+    /**
+     * 修改链接信息
+     * @param linkDTO 链接信息
+     */
+    void update(@Param("dto") VideoDownloadLinkDTO linkDTO) throws SQLException;
 }

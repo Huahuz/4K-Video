@@ -10,6 +10,7 @@ create table if not exists `video` (
 	`region` int not null comment "地区，如中国、欧美、日本、韩国、其它",
 	`years` int not null comment "年代，此视频的年代",
 	`status` int not null comment "状态，未发布、已发布、已冻结",
+	`is_top` int not null default 0 comment "是否置顶，0否 1是",
 	`summary` LONGTEXT COLLATE utf8mb4_unicode_520_ci NOT NULL comment "简要概述",
 	`create_time` datetime DEFAULT now() COMMENT "创建时间",
 	`update_time` datetime default now() comment "更新时间",

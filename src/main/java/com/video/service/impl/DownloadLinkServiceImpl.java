@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * description: 下载链接实现类
@@ -31,12 +32,6 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
     }
 
     @Override
-    public void switchStatus(String id, Integer status) throws SQLException {
-        videoDownloadLinkMapper.switchStatus(id,status);
-    }
-
-
-    @Override
     public List<VideoDownloadLinkDTO> list(VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException {
         List<VideoDownloadLink> list = videoDownloadLinkMapper.list(downloadLinkServiceDTO);
         return TransformUtil.downloadLinkTransformDTO(list);
@@ -44,8 +39,7 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
 
     @Override
     public int count(VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException{
-        int count = videoDownloadLinkMapper.count(downloadLinkServiceDTO);
-        return count;
+        return videoDownloadLinkMapper.count(downloadLinkServiceDTO);
     }
 
     @Override
@@ -58,5 +52,16 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
         String[] strings = ids.split(",");
         videoDownloadLinkMapper.deleteBatch(strings);
 
+    }
+
+    @Override
+    public void update(VideoDownloadLinkDTO linkDTO) throws SQLException {
+        if (Objects.isNull(linkDTO.getOrderNo())) {
+            linkDTO.setOrderNo(0);
+        }
+        if (Objects.isNull(linkDTO.getStatus())) {
+            linkDTO.setStatus(0);
+        }
+        videoDownloadLinkMapper.update(linkDTO);
     }
 }

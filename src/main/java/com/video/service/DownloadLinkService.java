@@ -22,13 +22,6 @@ public interface DownloadLinkService {
     void add(VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException;
 
     /**
-     * 根据id修改下载连接的内容
-     * @param id 修改的id
-     * @param status 修改后的状态
-     */
-    void switchStatus(String id, Integer status) throws SQLException;
-
-    /**
      * 根据条件查询下载链接
      * @param downloadLinkServiceDTO 筛选条件
      */
@@ -52,5 +45,9 @@ public interface DownloadLinkService {
      */
     void deleteBatch(String ids) throws SQLException;
 
-
+    /**
+     * 修改链接信息
+     * @param linkDTO 链接信息
+     */
+    void update(VideoDownloadLinkDTO linkDTO) throws SQLException;
 }
