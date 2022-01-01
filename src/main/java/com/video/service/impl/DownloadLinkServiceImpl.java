@@ -5,18 +5,20 @@ import com.video.entity.VideoDownloadLink;
 import com.video.mapper.VideoDownloadLinkMapper;
 import com.video.service.DownloadLinkService;
 import com.video.util.TransformUtil;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
 
 /**
- * description:
+ * description: 下载链接实现类
  *
  * @author fxx
  * @version 1.0
  * @since 2021/12/29 11:55
  */
+@Service
 public class DownloadLinkServiceImpl implements DownloadLinkService {
 
     @Resource
@@ -29,10 +31,10 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
     }
 
     @Override
-    public void update(VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException {
-        videoDownloadLinkMapper.update(downloadLinkServiceDTO);
-
+    public void switchStatus(String id, Integer status) throws SQLException {
+        videoDownloadLinkMapper.switchStatus(id,status);
     }
+
 
     @Override
     public List<VideoDownloadLinkDTO> list(VideoDownloadLinkDTO downloadLinkServiceDTO) throws SQLException {
