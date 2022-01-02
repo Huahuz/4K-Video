@@ -56,4 +56,14 @@ public interface VideoFilterCfgMapper {
      * @throws SQLException sql异常
      */
     List<VideoFilterCfg> list(@Param("dto") VideoFilterCfgDTO cfgDTO) throws SQLException;
+
+    /**
+     *
+     * @param parentId 父配置id
+     * @param key 配置项key
+     * @param type 配置项类型
+     * @return 查询结果
+     * @throws SQLException sql异常
+     */
+    List<VideoFilterCfg> selectOptions(@Param("parentId") String parentId, @Param("key") String key, @Param("type") Integer type) throws SQLException;
 }

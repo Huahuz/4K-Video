@@ -1,20 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.video.mapper.VideoMapper">
-  <resultMap id="BaseResultMap" type="com.video.entity.Video">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="category" jdbcType="INTEGER" property="category" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="region" jdbcType="INTEGER" property="region" />
-    <result column="years" jdbcType="INTEGER" property="years" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comments" jdbcType="VARCHAR" property="comments" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.video.entity.Video">
-    <result column="summary" jdbcType="LONGVARCHAR" property="summary" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.video.entity.Video">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="region" jdbcType="INTEGER" property="region"/>
+        <result column="years" jdbcType="INTEGER" property="years"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="is_top" jdbcType="INTEGER" property="isTop"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <result column="summary" jdbcType="LONGVARCHAR" property="summary"/>
+    </resultMap>
+
+    <resultMap id="ListMap" type="com.video.dto.business.VideoResultDTO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
+        <result column="categoryName" jdbcType="INTEGER" property="categoryName"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="typeName" jdbcType="VARCHAR" property="typeName"/>
+        <result column="region" jdbcType="INTEGER" property="region"/>
+        <result column="regionName" jdbcType="INTEGER" property="regionName"/>
+        <result column="years" jdbcType="INTEGER" property="years"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="is_top" jdbcType="INTEGER" property="isTop"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <result column="summary" jdbcType="LONGVARCHAR" property="summary"/>
+    </resultMap>
+
+    <select id="list" parameterType="com.video.dto.business.VideoDTO" resultMap="ListMap">
+        select
+            t3.id, t3.name, t3.category, t3.categoryName, t3.type, t3.region, t4.value as 'regionName',
+            t3.years,t3.status, t3.is_top, t3.summary, t3.create_time, t3.update_time, t3.comments
+        from
+            (
+                select
+                    t1.id, t1.name, t1.category, t2.value as `categoryName`, t1.type, t1.region, t1.years,
+                    t1.status, t1.is_top, t1.summary, t1.create_time, t1.update_time, t1.comments
+                from
+                    (
+                        select
+                            *
+                        from
+                            `video`
+                        <where>
+                            <if test="dto.name != null and dto.name != ''">
+                                and `name` like CONCAT('%', #{dto.name}, '%')
+                            </if>
+                            <if test="dto.category != null and dto.category != ''">
+                                and category = #{dto.category}
+                            </if>
+                            <if test="dto.region != null and dto.region != ''">
+                                and region = #{dto.region}
+                            </if>
+                            <!-- 此处的类型，在进行筛选查询时，只能为单选，所以用通配符进行匹配 -->
+                            <if test="dto.type != null and dto.type != ''">
+                                and `type` like CONCAT('%', #{dto.type}, '%')
+                            </if>
+                            <if test="dto.status != null">
+                                and status = #{dto.status}
+                            </if>
+                            <if test="dto.beginTime != null">
+                                and create_time <![CDATA[ >=  ]]> #{dto.beginTime}
+                            </if>
+                            <if test="dto.endTime != null">
+                                and create_time <![CDATA[ <=  ]]> #{dto.endTime}
+                            </if>
+                        </where>
+                        order by
+                            is_top desc, status, category, create_time desc
+                        <if test="dto.startIdx != null and dto.pageSize != null">
+                            limit #{dto.startIdx}, #{dto.pageSize}
+                        </if>
+                    ) t1
+                left join
+                    `video_filter_cfg` t2
+                on
+                    t1.category = t2.key
+            ) t3
+        left join
+            `video_filter_cfg` t4
+        on
+            t3.region = t4.key
+    </select>
+
+    <select id="count" parameterType="com.video.dto.business.VideoDTO" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            `video`
+        <where>
+            <if test="dto.name != null and dto.name != ''">
+                and `name` like CONCAT('%', #{dto.name}, '%')
+            </if>
+            <if test="dto.category != null and dto.category != ''">
+                and category = #{dto.category}
+            </if>
+            <if test="dto.region != null and dto.region != ''">
+                and region = #{dto.region}
+            </if>
+            <!-- 此处的类型，在进行筛选查询时，只能为单选，所以用通配符进行匹配 -->
+            <if test="dto.type != null and dto.type != ''">
+                and `type` like CONCAT('%', #{dto.type}, '%')
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.beginTime != null">
+                and create_time <![CDATA[ >=  ]]> #{dto.beginTime}
+            </if>
+            <if test="dto.endTime != null">
+                and create_time <![CDATA[ <=  ]]> #{dto.endTime}
+            </if>
+        </where>
+    </select>
 
 </mapper>

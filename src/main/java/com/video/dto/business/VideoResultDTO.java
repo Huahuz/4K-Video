@@ -1,12 +1,19 @@
-package com.video.entity;
+package com.video.dto.business;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * description: 视频信息查询结果实体传输类
+ *
+ * @author wxy
+ * @version 1.0
+ * @since 2022/1/2 16:49
+ */
 @Data
-public class Video {
-
+public class VideoResultDTO {
     /**
      * 视频id
      */
@@ -23,14 +30,29 @@ public class Video {
     private String category;
 
     /**
+     * 视频类别名称
+     */
+    private String categoryName;
+
+    /**
      * 视频类型
      */
     private String type;
 
     /**
+     * 视频类型名称
+     */
+    private String typeName;
+
+    /**
      * 地区
      */
     private String region;
+
+    /**
+     * 地区名称
+     */
+    private String regionName;
 
     /**
      * 视频年份
@@ -48,22 +70,18 @@ public class Video {
     private Integer isTop;
 
     /**
-     * 创建时间
+     * 视频简介
      */
-    private LocalDateTime createTime;
+    private String summary;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime createTime;
 
     /**
      * 备注
      */
     private String comments;
-
-    /**
-     * 视频简介
-     */
-    private String summary;
 }

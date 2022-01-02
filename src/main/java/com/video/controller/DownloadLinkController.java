@@ -7,7 +7,6 @@ import com.video.service.DownloadLinkService;
 import com.video.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,20 +48,16 @@ public class DownloadLinkController {
     }
 
     /**
-     * 下载链接状态修改
-     * @param id 修改的id
-     * @param status 修改后的状态
+     * 下载链接信息修改
+     * @param linkDTO 修改信息
      * @return 操作结果
      */
-    @ApiOperation(value = "下载链接状态修改")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "下载链接id", required = true),
-            @ApiImplicitParam(name = "status", value = "下载链接状态", required = true)
-    })
-    @GetMapping("/{id}/switch-status/{status}")
-    public ResponseResult<Object> switchStatu(@PathVariable String id, @PathVariable Integer status) {
+    @ApiOperation(value = "下载链接信息修改")
+    @ApiImplicitParam(name = "linkDTO", value = "下载链接修改信息", required = true)
+    @PostMapping("/update")
+    public ResponseResult<Object> update(@RequestBody VideoDownloadLinkDTO linkDTO) {
         try {
-            downloadLinkService.switchStatus(id,status);
+            downloadLinkService.update(linkDTO);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return ResponseResult.failure();

@@ -92,4 +92,36 @@
         </if>
     </select>
 
+    <select id="selectOptions" resultMap="BaseResultMap">
+        <choose>
+            <when test="key != null">
+                select
+                    son.id, son.parent_id, son.`key`, son.`value`, son.order_no, son.`type`
+                from
+                    video_filter_cfg as `son`
+                left join (
+                    select id from video_filter_cfg where `key` = #{key}
+                ) `parent`
+                on
+                    son.parent_id = parent.id
+                where
+                    parent.id is not null
+            </when>
+            <otherwise>
+                select
+                    <include refid="Base_Column_List"></include>
+                from
+                    video_filter_cfg t1
+                <where>
+                    <if test="parentId != null">
+                        and t1.parent_id = #{parentId}
+                    </if>
+                    <if test="type != null">
+                        and t1.type = #{type}
+                    </if>
+                </where>
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>

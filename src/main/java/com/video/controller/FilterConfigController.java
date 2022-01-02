@@ -7,6 +7,7 @@ import com.video.service.FilterConfigService;
 import com.video.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,6 +107,24 @@ public class FilterConfigController {
             List<VideoFilterCfgDTO> result = cfgService.list(cfgDTO);
             Page<List<VideoFilterCfgDTO>> listPage = Page.pageInfo(cfgDTO.getPage(), cfgDTO.getPageSize(), count, result);
             return ResponseResult.success(listPage);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return ResponseResult.failure();
+        }
+    }
+
+    /**
+     * 查询下拉框中的过滤项配置
+     * @param dto 过滤项配置查询数据
+     * @return 操作结果
+     */
+    @ApiOperation(value = "查询下拉框中的过滤项配置")
+    @ApiImplicitParam(name = "dto", value = "过滤项配置查询数据", required = true)
+    @PostMapping("/select-options")
+    public ResponseResult<List<VideoFilterCfgDTO>> selectOptions(@RequestBody VideoFilterCfgDTO dto) {
+        try {
+            List<VideoFilterCfgDTO> resultList = cfgService.selectOptions(dto.getParentId(), dto.getKey(), dto.getType());
+            return ResponseResult.success(resultList);
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ResponseResult.failure();
