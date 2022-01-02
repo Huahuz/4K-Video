@@ -4,6 +4,7 @@ import com.video.dto.business.VideoFilterCfgDTO;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * description: 过滤项配置接口
@@ -49,4 +50,21 @@ public interface FilterConfigService {
      * @throws SQLException sql异常
      */
     List<VideoFilterCfgDTO> list(VideoFilterCfgDTO cfgDTO) throws SQLException;
+
+    /**
+     *
+     * @param parentId 父配置id
+     * @param key 配置项key
+     * @param type 配置项类型
+     * @return 查询结果
+     * @throws SQLException sql异常
+     */
+    List<VideoFilterCfgDTO> selectOptions(String parentId, String key, Integer type) throws SQLException;
+
+    /**
+     * 查询类型过滤项配置字典数据
+     * @return 查询结果
+     * @throws SQLException sql异常
+     */
+    Map<String, String> filterDict() throws SQLException;
 }

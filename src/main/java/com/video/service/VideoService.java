@@ -1,15 +1,19 @@
-package com.video.mapper;
+package com.video.service;
 
 import com.video.dto.business.VideoDTO;
 import com.video.dto.business.VideoResultDTO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Mapper
-public interface VideoMapper {
+/**
+ * description: 视频服务类
+ *
+ * @author wxy
+ * @version 1.0
+ * @since 2022/1/2 16:00
+ */
+public interface VideoService {
 
     /**
      * 根据条件查询视频列表
@@ -17,7 +21,7 @@ public interface VideoMapper {
      * @return 查询结果
      * @throws SQLException sql异常
      */
-    List<VideoResultDTO> list(@Param("dto") VideoDTO videoDTO) throws SQLException;
+    List<VideoResultDTO> list(VideoDTO videoDTO) throws SQLException;
 
     /**
      * 根据条件统计条数
@@ -25,5 +29,5 @@ public interface VideoMapper {
      * @return 查询结果
      * @throws SQLException sql异常
      */
-    int count(@Param("dto") VideoDTO videoDTO) throws SQLException;
+    int count(VideoDTO videoDTO) throws SQLException;
 }

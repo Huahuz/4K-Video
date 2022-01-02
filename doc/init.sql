@@ -3,11 +3,11 @@ use 4k_video;
 -- 视频表
 drop table if exists `video`;
 create table if not exists `video` (
-	`id` BIGINT(20) PRIMARY KEY not null COMMENT "视频记录id",
+	`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT not null COMMENT "视频记录id",
 	`name` varchar(100) not null COMMENT "视频名称",
-	`category` int not null COMMENT "视频类别，电影、电视剧、纪录片、演唱会、4k工具、其它",
+	`category` varchar(20) not null COMMENT "视频类别，电影、电视剧、纪录片、演唱会、4k工具、其它",
 	`type` varchar(500) not null comment "视频类型，多个类型由逗号进行分割",
-	`region` int not null comment "地区，如中国、欧美、日本、韩国、其它",
+	`region` varchar(20) not null comment "地区，如中国、欧美、日本、韩国、其它",
 	`years` int not null comment "年代，此视频的年代",
 	`status` int not null comment "状态，未发布、已发布、已冻结",
 	`is_top` int not null default 0 comment "是否置顶，0否 1是",

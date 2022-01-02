@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * description: 过滤项配置接口实现类
@@ -56,5 +58,24 @@ public class FilterConfigServiceImpl implements FilterConfigService {
     public List<VideoFilterCfgDTO> list(VideoFilterCfgDTO cfgDTO) throws SQLException {
         List<VideoFilterCfg> queryList = cfgMapper.list(cfgDTO);
         return TransformUtil.configTransformDTO(queryList);
+    }
+
+    @Override
+    public List<VideoFilterCfgDTO> selectOptions(String parentId, String key, Integer type) throws SQLException {
+        List<VideoFilterCfg> queryList = cfgMapper.selectOptions(parentId, key, type);
+        return TransformUtil.configTransformDTO(queryList);
+    }
+
+    @Override
+    public Map<String, String> filterDict() throws SQLException {
+        return cfgMapper.selectOptions(null, null, 0)
+                .stream()
+                .collect(
+                    Collectors.toMap(
+                        VideoFilterCfg::getKey,
+                        VideoFilterCfg::getValue,
+                        (key1, key2) -> key2
+                    )
+                );
     }
 }
