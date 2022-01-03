@@ -64,4 +64,9 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
         }
         videoDownloadLinkMapper.update(linkDTO);
     }
+
+    @Override
+    public void deleteByVideoId(String[] idArr) throws SQLException {
+        videoDownloadLinkMapper.deleteByVideoId(idArr);
+    }
 }

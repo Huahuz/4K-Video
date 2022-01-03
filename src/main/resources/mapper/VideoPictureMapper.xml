@@ -91,4 +91,9 @@
     </where>
   </delete>
 
+  <delete id="deleteByVideoId">
+    delete
+    from video_picture
+    where video_id in <foreach collection="idArr" open="(" separator="," close=")" item="id">#{id}</foreach>
+  </delete>
 </mapper>

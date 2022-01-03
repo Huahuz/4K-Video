@@ -90,4 +90,10 @@
             </if>
         </where>
     </select>
+
+    <delete id="deleteByVideoId">
+        delete
+        from video_comment
+        where video_id in <foreach collection="idArr" open="(" separator="," close=")" item="id">#{id}</foreach>
+    </delete>
 </mapper>

@@ -59,4 +59,11 @@ public interface CommentService {
      * @param status 评论状态
      */
     void switchStatusBatch(String ids, Integer status) throws SQLException;
+
+    /**
+     * 根据视频id删除记录
+     * @param idArr 视频id
+     * @throws SQLException sql异常
+     */
+    void deleteByVideoId(String[] idArr) throws SQLException;
 }

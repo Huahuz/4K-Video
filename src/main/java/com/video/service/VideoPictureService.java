@@ -34,8 +34,6 @@ public interface VideoPictureService {
      */
     List<VideoPictureDTO> list(VideoPictureDTO pictureDTO) throws SQLException;
 
-
-
     /**
      * 根据id删除视频图片信息
      * @param id 视频图片id
@@ -56,5 +54,12 @@ public interface VideoPictureService {
      * @return 查询结果
      */
     int count(VideoPictureDTO pictureDTO) throws SQLException;
+
+    /**
+     * 根据视频id删除记录
+     * @param idArr 视频id
+     * @throws SQLException sql异常
+     */
+    void deleteByVideoId(String[] idArr) throws SQLException;
 
 }

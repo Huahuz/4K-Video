@@ -20,3 +20,7 @@ mybatis:
   type-aliases-package: com.video.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+### log config
+logging:
+  config: classpath:logback-spring.xml

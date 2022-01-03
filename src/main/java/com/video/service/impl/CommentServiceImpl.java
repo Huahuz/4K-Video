@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,5 +63,10 @@ public class CommentServiceImpl implements CommentService {
     public void switchStatusBatch(String ids, Integer status) throws SQLException {
         String[] idArr = ids.split(",");
         commentMapper.switchStatusBatch(idArr, status);
+    }
+
+    @Override
+    public void deleteByVideoId(String[] idArr) throws SQLException {
+        commentMapper.deleteByVideoId(idArr);
     }
 }

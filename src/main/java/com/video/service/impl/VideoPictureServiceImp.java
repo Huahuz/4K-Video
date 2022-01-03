@@ -59,4 +59,9 @@ public class VideoPictureServiceImp implements VideoPictureService {
         int count = videoPictureMapper.count(pictureDTO);
         return count;
     }
+
+    @Override
+    public void deleteByVideoId(String[] idArr) throws SQLException {
+        videoPictureMapper.deleteByVideoId(idArr);
+    }
 }

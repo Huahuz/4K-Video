@@ -87,6 +87,8 @@
             `video_filter_cfg` t4
         on
             t3.region = t4.key
+        order by
+            t3.is_top desc, t3.status, t3.category, t3.create_time desc
     </select>
 
     <select id="count" parameterType="com.video.dto.business.VideoDTO" resultType="java.lang.Integer">
@@ -120,4 +122,58 @@
         </where>
     </select>
 
+    <update id="top">
+        update
+            `video`
+        set
+            is_top = #{status}
+        where
+            id = #{id}
+    </update>
+
+    <update id="switchStatusBatch">
+        update
+            `video`
+        set
+            `status` = #{status}
+        where
+            id in
+            <foreach collection="idArr" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </update>
+
+    <delete id="deleteBatch">
+        delete from
+            `video`
+        where
+            id in
+            <foreach collection="idArr" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </delete>
+
+    <select id="getDeleteInfo" resultType="com.video.dto.business.DeleteInfoDTO">
+        SELECT
+            t2.id, t2.videoName, t2.picName, t2.picUrl, GROUP_CONCAT(t3.name) as `linkName`, GROUP_CONCAT(t3.url) as `linkUrl`
+        FROM (
+                select
+                    t1.id, t1.name as `videoName`, GROUP_CONCAT(t2.name) as `picName`, GROUP_CONCAT(t2.url) as `picUrl`
+                from (
+                    select
+                        id, `name`
+                    from
+                        `video`
+                    where
+                        id in
+                        <foreach collection="idArr" item="id" open="(" close=")" separator=",">
+                            #{id}
+                        </foreach>
+            ) t1
+            left join `video_picture` t2 on t1.id = t2.video_id
+            group by t1.id
+        ) t2
+        left join `video_download_link` t3 on t2.id = t3.video_id
+        group by t2.id
+    </select>
 </mapper>

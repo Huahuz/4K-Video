@@ -7,7 +7,6 @@ import com.video.service.FilterConfigService;
 import com.video.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +36,7 @@ public class FilterConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "添加过滤项配置")
-    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置信息", required = true)
+    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置信息", required = true, dataType = "VideoFilterCfgDTO", dataTypeClass = VideoFilterCfgDTO.class)
     @PostMapping("/add")
     public ResponseResult<Object> add(@RequestBody VideoFilterCfgDTO cfgDTO) {
         try {
@@ -55,7 +54,7 @@ public class FilterConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "修改过滤项配置")
-    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置信息", required = true)
+    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置信息", required = true, dataType = "VideoFilterCfgDTO", dataTypeClass = VideoFilterCfgDTO.class)
     @PostMapping("/update")
     public ResponseResult<Object> update(@RequestBody VideoFilterCfgDTO cfgDTO) {
         try {
@@ -73,7 +72,7 @@ public class FilterConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "删除过滤项配置")
-    @ApiImplicitParam(name = "id", value = "过滤项配置id", required = true)
+    @ApiImplicitParam(name = "id", value = "过滤项配置id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id) {
         try {
@@ -91,7 +90,7 @@ public class FilterConfigController {
      * @return 查询结果
      */
     @ApiOperation(value = "按条件查询过滤项配置")
-    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置", required = true)
+    @ApiImplicitParam(name = "cfgDTO", value = "过滤项配置", required = true, dataType = "VideoFilterCfgDTO", dataTypeClass = VideoFilterCfgDTO.class)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoFilterCfgDTO>>> list(@RequestBody VideoFilterCfgDTO cfgDTO) {
         try {
@@ -119,7 +118,7 @@ public class FilterConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "查询下拉框中的过滤项配置")
-    @ApiImplicitParam(name = "dto", value = "过滤项配置查询数据", required = true)
+    @ApiImplicitParam(name = "dto", value = "过滤项配置查询数据", required = true, dataType = "VideoFilterCfgDTO", dataTypeClass = VideoFilterCfgDTO.class)
     @PostMapping("/select-options")
     public ResponseResult<List<VideoFilterCfgDTO>> selectOptions(@RequestBody VideoFilterCfgDTO dto) {
         try {

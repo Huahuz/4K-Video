@@ -30,4 +30,40 @@ public interface VideoService {
      * @throws SQLException sql异常
      */
     int count(VideoDTO videoDTO) throws SQLException;
+
+    /**
+     * 修改视频置顶状态
+     * @param id 视频id
+     * @param status 视频状态
+     * @throws SQLException sql异常
+     */
+    void top(String id, String status) throws SQLException;
+
+    /**
+     * 批量视频审核状态修改
+     * @param ids 视频id
+     * @param status 审核状态
+     * @throws SQLException sql异常
+     */
+    void switchStatusBatch(String ids, String status) throws SQLException;
+
+    /**
+     * 单条视频审核状态修改
+     * @param id 视频id
+     * @param status 审核状态
+     * @throws SQLException sql异常
+     */
+    void switchStatus(String id, String status) throws SQLException;
+
+    /**
+     * 删除单条视频
+     * @param id 视频id
+     */
+    void delete(String id);
+
+    /**
+     * 批量删除视频
+     * @param ids 视频ids
+     */
+    void deleteBatch(String ids);
 }

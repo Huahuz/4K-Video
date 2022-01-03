@@ -7,9 +7,9 @@ import com.video.service.VideoPictureService;
 import com.video.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
@@ -37,7 +37,7 @@ public class PictureController {
      * @return 操作结果
      */
     @ApiOperation(value = "添加视频图片的方法")
-    @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
+    @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true, dataType = "VideoPictureDTO", dataTypeClass = VideoPictureDTO.class)
     @PostMapping("/add")
     public ResponseResult<Object> add(@RequestBody VideoPictureDTO pictureDTO) {
         try {
@@ -55,7 +55,7 @@ public class PictureController {
      * @return 操作结果
      */
     @ApiOperation(value = "视频图片信息修改")
-    @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true)
+    @ApiImplicitParam(name = "pictureDTO", value = "视频图片信息", required = true, dataType = "VideoPictureDTO", dataTypeClass = VideoPictureDTO.class)
     @PostMapping("/update")
     public ResponseResult<Object> update(@RequestBody VideoPictureDTO pictureDTO) {
         try {
@@ -74,7 +74,7 @@ public class PictureController {
      * @return 查询结果
      */
     @ApiOperation(value = "按条件查询图片信息")
-    @ApiImplicitParam(name = "pictureDTO", value = "筛选条件", required = true)
+    @ApiImplicitParam(name = "pictureDTO", value = "筛选条件", required = true, dataType = "VideoPictureDTO", dataTypeClass = VideoPictureDTO.class)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoPictureDTO>>> list(@RequestBody VideoPictureDTO pictureDTO) {
         try {
@@ -100,7 +100,7 @@ public class PictureController {
      * @return 查询结果
      */
     @ApiOperation(value = "按id删除图片信息")
-    @ApiImplicitParam(name = "id", value = "视频图片id", required = true)
+    @ApiImplicitParam(name = "id", value = "视频图片id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id){
         try {
@@ -119,7 +119,7 @@ public class PictureController {
      * @return 查询结果
      */
     @ApiOperation(value = "批量删除图片信息")
-    @ApiImplicitParam(name = "ids", value = "视频图片id", required = true)
+    @ApiImplicitParam(name = "ids", value = "视频图片id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete-batch/{ids}")
     public ResponseResult<Object> deleteBatch(@PathVariable String ids){
         try {

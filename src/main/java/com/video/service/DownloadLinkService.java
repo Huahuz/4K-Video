@@ -1,7 +1,6 @@
 package com.video.service;
 
 import com.video.dto.business.VideoDownloadLinkDTO;
-import com.video.entity.VideoDownloadLink;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -50,4 +49,11 @@ public interface DownloadLinkService {
      * @param linkDTO 链接信息
      */
     void update(VideoDownloadLinkDTO linkDTO) throws SQLException;
+
+    /**
+     * 根据视频id删除记录
+     * @param idArr 视频id
+     * @throws SQLException sql异常
+     */
+    void deleteByVideoId(String[] idArr) throws SQLException;
 }

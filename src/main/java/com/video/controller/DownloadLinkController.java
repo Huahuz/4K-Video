@@ -35,7 +35,7 @@ public class DownloadLinkController {
      * @return 操作结果
      */
     @ApiOperation(value = "添加下载链接的方法")
-    @ApiImplicitParam(name = "downloadLinkDTO", value = "下载链接信息", required = true)
+    @ApiImplicitParam(name = "downloadLinkDTO", value = "下载链接信息", required = true, dataType = "VideoDownloadLinkDTO", dataTypeClass = VideoDownloadLinkDTO.class)
     @PostMapping("/add")
     public ResponseResult<Object> add(@RequestBody VideoDownloadLinkDTO downloadLinkDTO) {
         try {
@@ -53,7 +53,7 @@ public class DownloadLinkController {
      * @return 操作结果
      */
     @ApiOperation(value = "下载链接信息修改")
-    @ApiImplicitParam(name = "linkDTO", value = "下载链接修改信息", required = true)
+    @ApiImplicitParam(name = "linkDTO", value = "下载链接修改信息", required = true, dataType = "VideoDownloadLinkDTO", dataTypeClass = VideoDownloadLinkDTO.class)
     @PostMapping("/update")
     public ResponseResult<Object> update(@RequestBody VideoDownloadLinkDTO linkDTO) {
         try {
@@ -72,7 +72,7 @@ public class DownloadLinkController {
      * @return 查询结果
      */
     @ApiOperation(value = "按条件查询下载链接信息")
-    @ApiImplicitParam(name = "downloadLinkDTO", value = "筛选条件", required = true)
+    @ApiImplicitParam(name = "downloadLinkDTO", value = "筛选条件", required = true, dataType = "VideoDownloadLinkDTO", dataTypeClass = VideoDownloadLinkDTO.class)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoDownloadLinkDTO>>> list(@RequestBody VideoDownloadLinkDTO downloadLinkDTO) {
         try {
@@ -98,7 +98,7 @@ public class DownloadLinkController {
      * @return 查询结果
      */
     @ApiOperation(value = "按id删除下载链接信息")
-    @ApiImplicitParam(name = "id", value = "下载链接id", required = true)
+    @ApiImplicitParam(name = "id", value = "下载链接id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id){
         try {
@@ -117,7 +117,7 @@ public class DownloadLinkController {
      * @return 查询结果
      */
     @ApiOperation(value = "批量删除下载链接信息")
-    @ApiImplicitParam(name = "ids", value = "下载链接信息id", required = true)
+    @ApiImplicitParam(name = "ids", value = "下载链接信息id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete-batch/{ids}")
     public ResponseResult<Object> deleteBatch(@PathVariable String ids){
         try {
