@@ -1,6 +1,7 @@
 package com.video.controller;
 
 import com.video.dto.business.VideoDTO;
+import com.video.dto.business.VideoDetailDTO;
 import com.video.dto.business.VideoFilterCfgDTO;
 import com.video.dto.business.VideoResultDTO;
 import com.video.dto.common.Page;
@@ -59,4 +60,50 @@ public class VideoController {
             return ResponseResult.failure();
         }
     }
+
+
+    @ApiOperation("单条视频详情信息查询")
+    @ApiImplicitParam(name = "id", value = "查询id", required = true)
+    @PostMapping("/{id}/detail")
+    public ResponseResult<VideoDetailDTO> detail(@PathVariable String id){
+
+        try {
+            VideoDetailDTO detailDTO = videoService.detail(id);
+            return ResponseResult.success(detailDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+    }
+
+    @ApiOperation("视频新增")
+    @ApiImplicitParam(name = "videoDetailDTO", value = "新增信息", required = true)
+    @PostMapping("/add")
+    public ResponseResult<Object> detail(@RequestBody VideoDetailDTO videoDetailDTO){
+
+        try {
+            videoService.add(videoDetailDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+    @ApiOperation("视频修改")
+    @ApiImplicitParam(name = "videoDetailDTO", value = "修改信息", required = true)
+    @PostMapping("/update")
+    public ResponseResult<Object> update(@RequestBody VideoDetailDTO videoDetailDTO){
+
+        try {
+            videoService.update(videoDetailDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+
+
 }

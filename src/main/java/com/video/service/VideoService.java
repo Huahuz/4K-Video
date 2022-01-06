@@ -1,7 +1,9 @@
 package com.video.service;
 
 import com.video.dto.business.VideoDTO;
+import com.video.dto.business.VideoDetailDTO;
 import com.video.dto.business.VideoResultDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,4 +32,27 @@ public interface VideoService {
      * @throws SQLException sql异常
      */
     int count(VideoDTO videoDTO) throws SQLException;
+
+
+    /**
+     * 根据提供的id查询视频的详细信息
+     * @param id 查询的视频id
+     * @return 操作结果
+     */
+    VideoDetailDTO detail(String id) throws SQLException;
+
+    /**
+     * 将详细的视频信息添加进数据库
+     * @param dto 添加的视频信息
+     * @return 操作结果
+     */
+    void add(VideoDetailDTO dto) throws SQLException;
+
+    /**
+     * 将视频信息进行修改，同时修改对应的图片和链接信息
+     * @param dto 添加的视频信息
+     * @return 操作结果
+     */
+    void update(VideoDetailDTO dto) throws SQLException;
+
 }
