@@ -33,7 +33,6 @@ public interface VideoSysCfgMapper {
      */
     void deleteById(@Param("id") Long id) throws SQLException;
 
-
     /**
      * 根据条件查询系统配置数量
      * @return 查询结果

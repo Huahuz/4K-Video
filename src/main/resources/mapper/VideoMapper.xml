@@ -33,6 +33,70 @@
         <result column="summary" jdbcType="LONGVARCHAR" property="summary"/>
     </resultMap>
 
+    <resultMap id="DetailMap" type="com.video.dto.business.VideoDetailDTO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="category" jdbcType="INTEGER" property="category"/>
+        <result column="categoryName" jdbcType="INTEGER" property="categoryName"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="typeName" jdbcType="VARCHAR" property="typeName"/>
+        <result column="region" jdbcType="INTEGER" property="region"/>
+        <result column="regionName" jdbcType="INTEGER" property="regionName"/>
+        <result column="years" jdbcType="INTEGER" property="years"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="is_top" jdbcType="INTEGER" property="isTop"/>
+        <result column="summary" jdbcType="LONGVARCHAR" property="summary"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comments" jdbcType="VARCHAR" property="comments"/>
+        <collection property="pictureList" ofType="java.util.HashMap">
+            <id column="p_id" jdbcType="VARCHAR" property="id"/>
+            <result column="p_url" jdbcType="VARCHAR" property="url"/>
+        </collection>
+        <collection property="linkList" ofType="java.util.HashMap">
+            <id column="d_id" jdbcType="VARCHAR" property="id"/>
+            <result column="d_url" jdbcType="VARCHAR" property="url"/>
+            <result column="d_name" jdbcType="VARCHAR" property="name"/>
+        </collection>
+    </resultMap>
+
+    <insert id="add" parameterType="com.video.dto.business.VideoDetailDTO" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO video
+            SET `name`=#{dto.name},category=#{dto.category},region=#{dto.region},`type`=#{dto.type},
+                years=#{dto.years},summary=#{dto.summary},status=#{dto.status}
+    </insert>
+
+    <update id="update" parameterType="com.video.dto.business.VideoDetailDTO" keyProperty="id" keyColumn="id"
+            useGeneratedKeys="true">
+        update video
+            SET `name`=#{dto.name},category=#{dto.category},
+                region=#{dto.region},`type`=#{dto.type},
+                years=#{dto.years},summary=#{dto.summary},status=#{dto.status}
+        where id=#{dto.id}
+    </update>
+
+    <select id="detail" parameterType="java.lang.String" resultMap="DetailMap">
+        SELECT
+            t2.id, t2.`name`, t2.category, t2.`categoryName`, t2.`regionName`,
+            t2.type,t2.region,t2.years,t2.`status`,t2.is_top,
+            t2.summary,t2.create_time,t2.update_time,t2.comments,
+            p.id as `p_id`, p.url as `p_url`,
+            d.id as `d_id`,d.url as `d_url`,d.`name` as `d_name`
+        FROM
+            (SELECT
+                 t1.id,t1.`name`,t1.category,t1.type,t1.region,t1.years,t1.`status`,
+                 t1.is_top,t1.summary,t1.create_time,t1.update_time,t1.comments,
+                 f2.`value` AS `categoryName`,f1.`value` AS `regionName`
+             FROM
+                     ( SELECT * FROM video WHERE id = #{id} ) t1
+                         LEFT JOIN video_filter_cfg f1 ON t1.region = f1.KEY
+                         LEFT JOIN video_filter_cfg f2 ON t1.category = f2.KEY
+                         LEFT JOIN video_filter_cfg f3 ON INSTR( t1.type, f3.KEY )) t2
+                LEFT JOIN video_picture p ON t2.id = p.video_id
+                LEFT JOIN video_download_link d ON  t2.id=d.video_id;
+    </select>
+
+
     <select id="list" parameterType="com.video.dto.business.VideoDTO" resultMap="ListMap">
         select
             t3.id, t3.name, t3.category, t3.categoryName, t3.type, t3.region, t4.value as 'regionName',
@@ -175,5 +239,96 @@
         ) t2
         left join `video_download_link` t3 on t2.id = t3.video_id
         group by t2.id
+    </select>
+
+    <select id="searchAppList" parameterType="com.video.dto.business.AppQueryParam" resultType="com.video.dto.business.AppQueryResult">
+        SELECT
+            t3.id, t3.name, t3.categoryName, t4.url as 'picUrl'
+        FROM
+            (
+                select
+                    t1.id, t1.name, t2.key as 'category', t2.value as 'categoryName'
+                from
+                     (
+                        select
+                            t.id, t.name
+                        from
+                            video t
+                        <where>
+                            t.status = 1
+                            <if test="dto.name != null and dto.name != ''">
+                                and t.name like CONCAT('%', #{dto.name}, '%')
+                            </if>
+                            <if test="dto.category != null and dto.category != ''">
+                                and t.category = #{dto.category}
+                            </if>
+                            <if test="dto.type != null and dto.type != ''">
+                                and t.type like CONCAT('%', #{dto.type}, '%')
+                            </if>
+                            <if test="dto.region != null and dto.region != ''">
+                                and t.region like CONCAT('%', #{dto.region}, '%')
+                            </if>
+                            <choose>
+                                <when test="dto.isTop == '0'.toString()">
+                                    and t.is_top = 0
+                                </when>
+                                <otherwise>
+                                    and t.is_top = 1
+                                </otherwise>
+                            </choose>
+                        </where>
+                        order by
+                            t.create_time desc
+                        <if test="dto.startIdx != null and dto.pageSize != null">
+                            limit #{dto.startIdx}, #{dto.pageSize}
+                        </if>
+                    ) t1
+                left join
+                    video_filter_cfg t2
+                on
+                    t1.category = t2.key
+            ) t3
+        left join
+            (
+                SELECT
+                    p.*
+                from
+                    (
+                        SELECT
+                            video_id, url, order_no
+                        FROM
+                            video_picture
+                        order by
+                            video_id, order_no
+                    ) p
+                GROUP BY
+                    p.video_id
+            )t4
+        on
+            t3.id = t4.video_id
+    </select>
+
+    <resultMap id="appDetail" type="com.video.dto.business.AppDetailInfo">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="years" column="years" />
+        <result property="summary" column="summary" />
+        <collection property="pictureList" column="id" javaType="list" select="getPicList"/>
+    </resultMap>
+    
+    <select id="getAppDetail" resultMap="appDetail">
+        select id, name, years, summary from video where id = #{id} and status = 1;
+    </select>
+
+    <select id="getPicList" parameterType="java.lang.Integer" resultType="com.video.dto.business.app.Picture">
+        select id, url from video_picture where video_id = #{id}
+    </select>
+
+    <select id="getCommentById" resultType="com.video.dto.business.app.Comment">
+        select id, user_name as 'userName', content, AVG(score) as 'score' from video_comment where id = #{id} and status = 1;
+    </select>
+
+    <select id="setLinkList" resultType="com.video.dto.business.app.DownloadLink">
+        select id, name, url from video_download_link where id = #{id} and status = 1;
     </select>
 </mapper>

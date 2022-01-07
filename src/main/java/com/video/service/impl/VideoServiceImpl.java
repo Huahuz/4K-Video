@@ -1,11 +1,14 @@
 package com.video.service.impl;
 
-import com.video.dto.business.DeleteInfoDTO;
-import com.video.dto.business.VideoDTO;
-import com.video.dto.business.VideoResultDTO;
+import com.video.dto.business.*;
+import com.video.entity.VideoSysCfg;
 import com.video.mapper.VideoMapper;
+import com.video.mapper.VideoSysCfgMapper;
 import com.video.service.*;
+import com.video.util.PageUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * description: 视频服务实现类
@@ -43,6 +49,9 @@ public class VideoServiceImpl implements VideoService {
     @Resource
     private DownloadLinkService downloadLinkService;
 
+    @Resource
+    private VideoSysCfgMapper sysCfgMapper;
+
     @Override
     public List<VideoResultDTO> list(VideoDTO videoDTO) throws SQLException {
         // 根据条件查询列表数据，并联表翻译地区与类别字段
@@ -50,6 +59,7 @@ public class VideoServiceImpl implements VideoService {
         // 将查询到的数据的类型字段进行格式组装并进行翻译
         // type: love,action,story;  dict: key:value
         Map<String, String> filterDict = cfgService.filterDict();
+
         queryList.forEach(res -> {
             if (StringUtils.isBlank(res.getType())) {
                 return;
@@ -61,7 +71,6 @@ public class VideoServiceImpl implements VideoService {
             }
             res.setTypeName(typeName.deleteCharAt(typeName.length() - 1).toString());
         });
-
         return queryList;
     }
 
@@ -117,5 +126,152 @@ public class VideoServiceImpl implements VideoService {
         }
         LOGGER.info("删除视频的关联信息如下：[{}]", deleteInfo);
         LOGGER.info("id为：[{}]的视频删除成功。", ids);
+    }
+
+    @Override
+    public VideoDetailDTO detail(String id) throws SQLException {
+        VideoDetailDTO detailDTO = videoMapper.detail(id);
+        Map<String, String> filterDict = cfgService.filterDict();
+        if (detailDTO==null||StringUtils.isBlank(detailDTO.getType())) {
+            return detailDTO;
+        }else{
+            String[] types = detailDTO.getType().split(",");
+            System.out.println("+++++++++++++++++++");
+            System.out.println(types.toString());
+            System.out.println("+++++++++++++++++++");
+            StringBuilder typeName = new StringBuilder();
+            for (String type : types) {
+                typeName.append(filterDict.get(type)).append("/");
+            }
+            detailDTO.setTypeName(typeName.deleteCharAt(typeName.length() - 1).toString());
+            return detailDTO;
+        }
+    }
+
+    @Transactional
+    @Override
+    public void add(VideoDetailDTO dto) throws SQLException {
+        videoMapper.add(dto);
+
+        Long id = dto.getId();
+        String s1 = String.valueOf(dto.getId());
+        List<Map<String, Object>> pictureDTOList = dto.getPictureList();
+
+        for (Map<String, Object> stringObjectMap : pictureDTOList) {
+            Set<String> keySet = stringObjectMap.keySet();
+            VideoPictureDTO pictureDTO = new VideoPictureDTO();
+            pictureDTO.setUrl(stringObjectMap.get("url").toString());
+            pictureDTO.setVideoId(s1);
+            pictureDTO.setName(" ");
+            pictureService.add(pictureDTO);
+        }
+        List<Map<String, Object>> downloadLinkDTOList = dto.getLinkList();
+        for (Map<String, Object> stringObjectMap : downloadLinkDTOList) {
+            Set<String> keySet = stringObjectMap.keySet();
+            VideoDownloadLinkDTO videoDownloadLinkDTO = new VideoDownloadLinkDTO();
+            videoDownloadLinkDTO.setUrl(stringObjectMap.get("url").toString());
+            videoDownloadLinkDTO.setName(stringObjectMap.get("name").toString());
+            videoDownloadLinkDTO.setVideoId(s1);
+            downloadLinkService.add(videoDownloadLinkDTO);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void update(VideoDetailDTO dto) throws SQLException {
+        videoMapper.update(dto);
+        //获取id值
+        Long id = dto.getId();
+        String s1 = String.valueOf(dto.getId());
+        //读取要更新的图片信息
+        List<Map<String, Object>> pictureDTOList = dto.getPictureList();
+        System.out.println(pictureDTOList);
+        for (Map<String, Object> stringObjectMap : pictureDTOList) {
+            Set<String> keySet = stringObjectMap.keySet();
+            VideoPictureDTO pictureDTO = new VideoPictureDTO();
+            pictureDTO.setId(stringObjectMap.get("id").toString());
+            pictureDTO.setUrl(stringObjectMap.get("url").toString());
+            pictureDTO.setVideoId(s1);
+            pictureDTO.setName(" ");
+            pictureService.update(pictureDTO);
+        }
+        List<Map<String, Object>> downloadLinkDTOList = dto.getLinkList();
+        for (Map<String, Object> stringObjectMap : downloadLinkDTOList) {
+            Set<String> keySet = stringObjectMap.keySet();
+            VideoDownloadLinkDTO videoDownloadLinkDTO = new VideoDownloadLinkDTO();
+            videoDownloadLinkDTO.setId(stringObjectMap.get("id").toString());
+            videoDownloadLinkDTO.setUrl(stringObjectMap.get("url").toString());
+            videoDownloadLinkDTO.setName(stringObjectMap.get("name").toString());
+            videoDownloadLinkDTO.setVideoId(s1);
+            downloadLinkService.update(videoDownloadLinkDTO);
+        }
+    }
+
+    @Override
+    public List<AppQueryResult> topList() {
+        AppQueryParam queryParam = new AppQueryParam();
+        queryParam.setIsTop(1);
+        queryParam.setStartIdx(null);
+        queryParam.setPage(null);
+        try {
+            return videoMapper.searchAppList(queryParam);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            LOGGER.error("小程序列表查询异常");
+        }
+        return Lists.emptyList();
+    }
+
+    @Override
+    public List<AppQueryResult> appList(AppQueryParam param) {
+        AppQueryParam queryParam = new AppQueryParam();
+        queryParam.setStartIdx(PageUtil.computeStartIdx(param.getPage(), queryParam.getPageSize()));
+        try {
+            return videoMapper.searchAppList(queryParam);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            LOGGER.error("小程序列表查询异常");
+        }
+        return Lists.emptyList();
+    }
+
+    @Override
+    public AppDetailInfo appDetail(String id) {
+        try {
+            // 1.查询视频详情及其关联图片的信息
+            AppDetailInfo detailInfo = videoMapper.getAppDetail(id);
+            if (Objects.isNull(detailInfo)) {
+                LOGGER.error("未查询到视频id为：{}的信息", id);
+                return null;
+            }
+
+            // 2.查询评论和下载链接的启用状态
+            List<VideoSysCfg> cfgList = sysCfgMapper.list();
+            if (CollectionUtils.isEmpty(cfgList)) {
+                LOGGER.error("没有系统配置，请联系管理员进行检查配置");
+                return detailInfo;
+            }
+            Map<String, Integer> cfgMap = cfgList.stream().collect(Collectors.toMap(VideoSysCfg::getKey, VideoSysCfg::getStatus));
+            Integer offDownload = cfgMap.get("download");
+            Integer offComment = cfgMap.get("comment");
+            detailInfo.setOffLink(offDownload);
+            detailInfo.setOffComment(offComment);
+
+            // 3.根据启用状态判断是否需要查询评论和下载链接
+            if (offComment == 1) {
+                return detailInfo;
+            }
+            detailInfo.setCommentList(videoMapper.getCommentById(id));
+
+            if (offDownload == 1) {
+                return detailInfo;
+            }
+            detailInfo.setLinkList(videoMapper.getLinkById(id));
+            return detailInfo;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            LOGGER.error("id为:{}的视频详情查询错误，请联系管理员。", id);
+        }
+        return null;
     }
 }

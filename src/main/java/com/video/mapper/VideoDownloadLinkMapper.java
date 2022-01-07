@@ -58,4 +58,6 @@ public interface VideoDownloadLinkMapper {
      * @throws SQLException sql异常
      */
     void deleteByVideoId(@Param("idArr") String[] idArr) throws SQLException;
+
+
 }

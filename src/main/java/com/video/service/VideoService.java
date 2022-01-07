@@ -1,7 +1,6 @@
 package com.video.service;
 
-import com.video.dto.business.VideoDTO;
-import com.video.dto.business.VideoResultDTO;
+import com.video.dto.business.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -66,4 +65,43 @@ public interface VideoService {
      * @param ids 视频ids
      */
     void deleteBatch(String ids);
+
+    /**
+     * 根据提供的id查询视频的详细信息
+     * @param id 查询的视频id
+     * @return 操作结果
+     */
+    VideoDetailDTO detail(String id) throws SQLException;
+
+    /**
+     * 将详细的视频信息添加进数据库
+     * @param dto 添加的视频信息
+     */
+    void add(VideoDetailDTO dto) throws SQLException;
+
+    /**
+     * 将视频信息进行修改，同时修改对应的图片和链接信息
+     * @param dto 添加的视频信息
+     */
+    void update(VideoDetailDTO dto) throws SQLException;
+
+    /**
+     * 查询置顶视频信息
+     * @return 查询结果
+     */
+    List<AppQueryResult> topList();
+
+    /**
+     * 查询首页视频信息
+     * @param param 查询参数
+     * @return 查询结果
+     */
+    List<AppQueryResult> appList(AppQueryParam param);
+
+    /**
+     * 查询视频详情
+     * @param id 视频id
+     * @return 视频详情
+     */
+    AppDetailInfo appDetail(String id);
 }

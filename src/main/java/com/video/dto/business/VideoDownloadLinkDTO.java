@@ -41,11 +41,11 @@ public class VideoDownloadLinkDTO extends PageParam{
     /**
      * 同一视频链接顺序
      */
-    private Integer orderNo;
+    private int orderNo;
 
     /**
      * 链接状态，未发布、已发布、已冻结
      */
-    private Integer status;
+    private int status;
 
 }

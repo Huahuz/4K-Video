@@ -1,7 +1,6 @@
 package com.video.controller;
 
-import com.video.dto.business.VideoDTO;
-import com.video.dto.business.VideoResultDTO;
+import com.video.dto.business.*;
 import com.video.dto.common.Page;
 import com.video.dto.common.ResponseResult;
 import com.video.service.VideoService;
@@ -160,5 +159,112 @@ public class VideoController {
             return ResponseResult.failure();
         }
         return ResponseResult.success();
+    }
+
+    /**
+     * 单条视频详情信息查询
+     * @param id 视频id
+     * @return 查询结果
+     */
+    @ApiOperation("单条视频详情信息查询")
+    @ApiImplicitParam(name = "id", value = "视频id", required = true, dataType = "String", dataTypeClass = String.class)
+    @GetMapping("/{id}/detail")
+    public ResponseResult<VideoDetailDTO> detail(@PathVariable String id){
+        try {
+            VideoDetailDTO detailDTO = videoService.detail(id);
+            return ResponseResult.success(detailDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+    }
+
+    /**
+     * 视频新增
+     * @param videoDetailDTO 视频信息
+     * @return 操作结果
+     */
+    @ApiOperation("视频新增")
+    @ApiImplicitParam(name = "videoDetailDTO", value = "新增信息", required = true, dataType = "VideoDetailDTO", dataTypeClass = VideoDetailDTO.class)
+    @PostMapping("/add")
+    public ResponseResult<Object> detail(@RequestBody VideoDetailDTO videoDetailDTO){
+
+        try {
+            videoDetailDTO.setStatus(0);
+            videoService.add(videoDetailDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+    /**
+     * 视频修改
+     * @param videoDetailDTO 视频信息
+     * @return 操作结果
+     */
+    @ApiOperation("视频修改")
+    @ApiImplicitParam(name = "videoDetailDTO", value = "修改信息", required = true, dataType = "VideoDetailDTO", dataTypeClass = VideoDetailDTO.class)
+    @PostMapping("/update")
+    public ResponseResult<Object> update(@RequestBody VideoDetailDTO videoDetailDTO) {
+
+        try {
+            videoService.update(videoDetailDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+    /**
+     * 小程序端置顶信息查询
+     * @return 查询结果
+     */
+    @ApiOperation("小程序端置顶信息查询")
+    @GetMapping("/top-list")
+    public List<AppQueryResult> topList() {
+        return videoService.topList();
+    }
+
+    /**
+     * 小程序端查询列表
+     * @param page 页码
+     * @return 操作结果
+     */
+    @ApiOperation("小程序端查询列表")
+    @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "Integer", dataTypeClass = Integer.class)
+    @GetMapping("/{page}")
+    public List<AppQueryResult> appIndexList(@PathVariable("page") Integer page) {
+        AppQueryParam param = new AppQueryParam();
+        param.setPage(page);
+        param.setIsTop(0);
+        return videoService.appList(param);
+    }
+
+    /**
+     * 小程序端查询列表
+     * @param param 查询条件
+     * @return 操作结果
+     */
+    @ApiOperation("小程序端查询列表")
+    @ApiImplicitParam(name = "param", value = "查询条件", required = true, dataType = "AppQueryParam", dataTypeClass = AppQueryParam.class)
+    @PostMapping("/search")
+    public List<AppQueryResult> appSearchList(@RequestBody AppQueryParam param) {
+        param.setIsTop(1);
+        return videoService.appList(param);
+    }
+
+    /**
+     * 查询视频详情
+     * @param id 视频id
+     * @return 视频详情
+     */
+    @ApiOperation("查询视频详情")
+    @ApiImplicitParam(name = "id", value = "视频id", required = true, dataType = "String", dataTypeClass = String.class)
+    @GetMapping("/app/{id}/detail")
+    public AppDetailInfo appDetail(@PathVariable("id") String id) {
+        return videoService.appDetail(id);
     }
 }

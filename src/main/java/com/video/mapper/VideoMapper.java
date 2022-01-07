@@ -1,8 +1,8 @@
 package com.video.mapper;
 
-import com.video.dto.business.DeleteInfoDTO;
-import com.video.dto.business.VideoDTO;
-import com.video.dto.business.VideoResultDTO;
+import com.video.dto.business.*;
+import com.video.dto.business.app.Comment;
+import com.video.dto.business.app.DownloadLink;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -58,4 +58,53 @@ public interface VideoMapper {
      * @throws SQLException sql异常
      */
     List<DeleteInfoDTO> getDeleteInfo(String[] idArr) throws SQLException;
+
+    /**
+
+     * 根据提供的id查询视频的详细信息
+     * @param id 查询的视频id
+     * @return 操作结果
+     */
+    VideoDetailDTO detail(@Param("id") String id) throws SQLException;
+
+    /**
+     * 将详细的视频信息添加进数据库
+     * @param dto 添加的视频信息
+     */
+    void add(@Param("dto") VideoDetailDTO dto) throws SQLException;
+
+    /**
+     * 将视频信息进行修改，同时修改对应的图片和链接信息
+     * @param dto 添加的视频信息
+     */
+    void update(@Param("dto") VideoDetailDTO dto) throws SQLException;
+
+    /**
+     * 根据条件查询视频列表
+     * @param queryParam 小程序查询条件
+     * @return 查询结果
+     * @throws SQLException sql异常
+     */
+    List<AppQueryResult> searchAppList(@Param("dto") AppQueryParam queryParam) throws SQLException;
+
+    /**
+     * 根据id查询小程序展示视频详情
+     * @param id id
+     * @return 查询结果
+     */
+    AppDetailInfo getAppDetail(@Param("id") String id);
+
+    /**
+     * 根据ID查询评论
+     * @param id 视频id
+     * @return 查询结果
+     */
+    List<Comment> getCommentById(@Param("id") String id);
+
+    /**
+     * 根据ID查询下载链接
+     * @param id 视频id
+     * @return 查询结果
+     */
+    List<DownloadLink> getLinkById(@Param("id") String id);
 }
