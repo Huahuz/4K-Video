@@ -72,19 +72,14 @@ public class VideoServiceImpl implements VideoService {
         Map<String, String> filterDict = cfgService.filterDict();
         if (detailDTO==null||StringUtils.isBlank(detailDTO.getType())) {
             return detailDTO;
-        }else{
-            String[] types = detailDTO.getType().split(",");
-            System.out.println("+++++++++++++++++++");
-            System.out.println(types.toString());
-            System.out.println("+++++++++++++++++++");
-            StringBuilder typeName = new StringBuilder();
-            for (String type : types) {
-                typeName.append(filterDict.get(type)).append("/");
-            }
-            detailDTO.setTypeName(typeName.deleteCharAt(typeName.length() - 1).toString());
-            return detailDTO;
         }
-
+        String[] types = detailDTO.getType().split(",");
+        StringBuilder typeName = new StringBuilder();
+        for (String type : types) {
+            typeName.append(filterDict.get(type)).append("/");
+        }
+        detailDTO.setTypeName(typeName.deleteCharAt(typeName.length() - 1).toString());
+        return detailDTO;
     }
 
     @Transactional
@@ -93,28 +88,30 @@ public class VideoServiceImpl implements VideoService {
         videoMapper.add(dto);
 
         Long id = dto.getId();
-        String s1 = String.valueOf(dto.getId());
-        List<Map<String, Object>> pictureDTOList = dto.getPictureDTOList();
+        String s = String.valueOf(dto.getId());
 
-        for (Map<String, Object> stringObjectMap : pictureDTOList) {
-            Set<String> keySet = stringObjectMap.keySet();
-            VideoPictureDTO pictureDTO = new VideoPictureDTO();
-            pictureDTO.setUrl(stringObjectMap.get("url").toString());
-            pictureDTO.setVideoId(s1);
-            pictureDTO.setName(" ");
-            videoPictureService.add(pictureDTO);
+        List<InfoPicture> infoPictureList = dto.getInfoPictureList();
+        for (InfoPicture infoPicture : infoPictureList) {
+            VideoPictureDTO videoPictureDTO = new VideoPictureDTO();
+            videoPictureDTO.setId(infoPicture.getId());
+            videoPictureDTO.setVideoId(s);
+            videoPictureDTO.setName(" ");
+            videoPictureDTO.setUrl(infoPicture.getUrl());
+            videoPictureService.add(videoPictureDTO);
+
         }
-        List<Map<String, Object>> downloadLinkDTOList = dto.getDownloadLinkDTOList();
-        for (Map<String, Object> stringObjectMap : downloadLinkDTOList) {
-            Set<String> keySet = stringObjectMap.keySet();
+
+        List<InfoDownLoadLink> infoDownLoadLinkList = dto.getInfoDownLoadLinkList();
+        for (InfoDownLoadLink infoDownLoadLink : infoDownLoadLinkList) {
             VideoDownloadLinkDTO videoDownloadLinkDTO = new VideoDownloadLinkDTO();
-            videoDownloadLinkDTO.setUrl(stringObjectMap.get("url").toString());
-            videoDownloadLinkDTO.setName(stringObjectMap.get("name").toString());
-            videoDownloadLinkDTO.setVideoId(s1);
+            videoDownloadLinkDTO.setId(infoDownLoadLink.getId());
+            videoDownloadLinkDTO.setVideoId(s);
+            videoDownloadLinkDTO.setName(infoDownLoadLink.getName());
+            videoDownloadLinkDTO.setUrl(infoDownLoadLink.getUrl());
+            videoDownloadLinkDTO.setStatus(0);
+            videoDownloadLinkDTO.setOrderNo(0);
             downloadLinkService.add(videoDownloadLinkDTO);
         }
-
-
     }
 
     @Transactional
@@ -123,30 +120,26 @@ public class VideoServiceImpl implements VideoService {
         videoMapper.update(dto);
         //获取id值
         Long id = dto.getId();
-        String s1 = String.valueOf(dto.getId());
+        String s = String.valueOf(dto.getId());
         //读取要更新的图片信息
-        List<Map<String, Object>> pictureDTOList = dto.getPictureDTOList();
-        System.out.println(pictureDTOList);
-        for (Map<String, Object> stringObjectMap : pictureDTOList) {
-            Set<String> keySet = stringObjectMap.keySet();
-            VideoPictureDTO pictureDTO = new VideoPictureDTO();
-            pictureDTO.setId(stringObjectMap.get("id").toString());
-            pictureDTO.setUrl(stringObjectMap.get("url").toString());
-            pictureDTO.setVideoId(s1);
-            pictureDTO.setName(" ");
-            videoPictureService.update(pictureDTO);
+
+        List<InfoPicture> infoPictureList = dto.getInfoPictureList();
+        for (InfoPicture infoPicture : infoPictureList) {
+            VideoPictureDTO videoPictureDTO = new VideoPictureDTO();
+            videoPictureDTO.setId(infoPicture.getId());
+            videoPictureDTO.setVideoId(s);
+            videoPictureDTO.setUrl(infoPicture.getUrl());
+            videoPictureService.update(videoPictureDTO);
+
         }
-        List<Map<String, Object>> downloadLinkDTOList = dto.getDownloadLinkDTOList();
-        for (Map<String, Object> stringObjectMap : downloadLinkDTOList) {
-            Set<String> keySet = stringObjectMap.keySet();
+        List<InfoDownLoadLink> infoDownLoadLinkList = dto.getInfoDownLoadLinkList();
+        for (InfoDownLoadLink infoDownLoadLink : infoDownLoadLinkList) {
             VideoDownloadLinkDTO videoDownloadLinkDTO = new VideoDownloadLinkDTO();
-            videoDownloadLinkDTO.setId(stringObjectMap.get("id").toString());
-            videoDownloadLinkDTO.setUrl(stringObjectMap.get("url").toString());
-            videoDownloadLinkDTO.setName(stringObjectMap.get("name").toString());
-            videoDownloadLinkDTO.setVideoId(s1);
+            videoDownloadLinkDTO.setId(infoDownLoadLink.getId());
+            videoDownloadLinkDTO.setVideoId(s);
+            videoDownloadLinkDTO.setName(infoDownLoadLink.getName());
+            videoDownloadLinkDTO.setUrl(infoDownLoadLink.getUrl());
             downloadLinkService.update(videoDownloadLinkDTO);
         }
-
-
     }
 }
