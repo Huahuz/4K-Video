@@ -37,7 +37,7 @@ public class CommentController {
      * @return 操作结果
      */
     @ApiOperation(value = "添加评论方法")
-    @ApiImplicitParam(name = "commentDTO", value = "评论信息", required = true)
+    @ApiImplicitParam(name = "commentDTO", value = "评论信息", required = true, dataType = "VideoCommentDTO", dataTypeClass = VideoCommentDTO.class)
     @PostMapping("/add")
     public ResponseResult<Object> add(@RequestBody VideoCommentDTO commentDTO) {
         try {
@@ -55,7 +55,7 @@ public class CommentController {
      * @return 操作结果
      */
     @ApiOperation(value = "删除评论方法")
-    @ApiImplicitParam(name = "id", value = "评论id", required = true)
+    @ApiImplicitParam(name = "id", value = "评论id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id) {
         try {
@@ -73,7 +73,7 @@ public class CommentController {
      * @return 操作结果
      */
     @ApiOperation(value = "批量删除评论方法")
-    @ApiImplicitParam(name = "ids", value = "评论id", required = true)
+    @ApiImplicitParam(name = "ids", value = "评论id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete-batch/{ids}")
     public ResponseResult<Object> deleteBatch(@PathVariable String ids) {
         try {
@@ -93,8 +93,8 @@ public class CommentController {
      */
     @ApiOperation(value = "评论状态审核修改")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "评论id", required = true),
-            @ApiImplicitParam(name = "status", value = "评论状态", required = true)
+            @ApiImplicitParam(name = "id", value = "评论id", required = true, dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "status", value = "评论状态", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
     @GetMapping("/{id}/switch-status/{status}")
     public ResponseResult<Object> switchStatus(@PathVariable String id, @PathVariable Integer status) {
@@ -115,8 +115,8 @@ public class CommentController {
      */
     @ApiOperation(value = "批量评论状态审核修改")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids", value = "评论ids", required = true),
-            @ApiImplicitParam(name = "status", value = "评论状态", required = true)
+            @ApiImplicitParam(name = "ids", value = "评论ids", required = true, dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "status", value = "评论状态", required = true, dataType = "Integer", dataTypeClass = Integer.class)
     })
     @GetMapping("/{ids}/switch-status-batch/{status}")
     public ResponseResult<Object> switchStatusBatch(@PathVariable String ids, @PathVariable Integer status) {
@@ -135,7 +135,7 @@ public class CommentController {
      * @return 查询结果
      */
     @ApiOperation(value = "按条件查询评论")
-    @ApiImplicitParam(name = "commentDTO", value = "筛选条件", required = true)
+    @ApiImplicitParam(name = "commentDTO", value = "筛选条件", required = true, dataType = "VideoCommentDTO", dataTypeClass = VideoCommentDTO.class)
     @PostMapping("/list")
     public ResponseResult<Page<List<VideoCommentDTO>>> list(@RequestBody VideoCommentDTO commentDTO) {
         try {

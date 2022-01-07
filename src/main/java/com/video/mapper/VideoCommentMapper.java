@@ -48,4 +48,11 @@ public interface VideoCommentMapper {
      * @throws SQLException sql异常
      */
     int count(@Param("dto") VideoCommentDTO commentDTO) throws SQLException;
+
+    /**
+     * 根据视频id删除记录
+     * @param idArr 视频id
+     * @throws SQLException sql异常
+     */
+    void deleteByVideoId(@Param("idArr") String[] idArr) throws SQLException;
 }

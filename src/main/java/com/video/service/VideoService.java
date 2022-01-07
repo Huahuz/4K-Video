@@ -1,9 +1,6 @@
 package com.video.service;
 
-import com.video.dto.business.VideoDTO;
-import com.video.dto.business.VideoDetailDTO;
-import com.video.dto.business.VideoResultDTO;
-import org.apache.ibatis.annotations.Param;
+import com.video.dto.business.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -33,6 +30,41 @@ public interface VideoService {
      */
     int count(VideoDTO videoDTO) throws SQLException;
 
+    /**
+     * 修改视频置顶状态
+     * @param id 视频id
+     * @param status 视频状态
+     * @throws SQLException sql异常
+     */
+    void top(String id, String status) throws SQLException;
+
+    /**
+     * 批量视频审核状态修改
+     * @param ids 视频id
+     * @param status 审核状态
+     * @throws SQLException sql异常
+     */
+    void switchStatusBatch(String ids, String status) throws SQLException;
+
+    /**
+     * 单条视频审核状态修改
+     * @param id 视频id
+     * @param status 审核状态
+     * @throws SQLException sql异常
+     */
+    void switchStatus(String id, String status) throws SQLException;
+
+    /**
+     * 删除单条视频
+     * @param id 视频id
+     */
+    void delete(String id);
+
+    /**
+     * 批量删除视频
+     * @param ids 视频ids
+     */
+    void deleteBatch(String ids);
 
     /**
      * 根据提供的id查询视频的详细信息
@@ -44,15 +76,32 @@ public interface VideoService {
     /**
      * 将详细的视频信息添加进数据库
      * @param dto 添加的视频信息
-     * @return 操作结果
      */
     void add(VideoDetailDTO dto) throws SQLException;
 
     /**
      * 将视频信息进行修改，同时修改对应的图片和链接信息
      * @param dto 添加的视频信息
-     * @return 操作结果
      */
     void update(VideoDetailDTO dto) throws SQLException;
 
+    /**
+     * 查询置顶视频信息
+     * @return 查询结果
+     */
+    List<AppQueryResult> topList();
+
+    /**
+     * 查询首页视频信息
+     * @param param 查询参数
+     * @return 查询结果
+     */
+    List<AppQueryResult> appList(AppQueryParam param);
+
+    /**
+     * 查询视频详情
+     * @param id 视频id
+     * @return 视频详情
+     */
+    AppDetailInfo appDetail(String id);
 }

@@ -98,11 +98,11 @@ public class VideoDetailDTO{
     /**
      * 视频对应的图片信息
      */
-    private List<Map<String, Object>> pictureDTOList;
+    private List<Map<String, Object>> pictureList;
 
     /**
      * 视频对应的链接信息
      */
-    private List<Map<String, Object>> downloadLinkDTOList;
+    private List<Map<String, Object>> linkList;
 
 }

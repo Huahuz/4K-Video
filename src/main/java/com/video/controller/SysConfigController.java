@@ -35,7 +35,7 @@ public class SysConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "添加系统配置")
-    @ApiImplicitParam(name = "cfgDTO", value = "系统配置信息", required = true)
+    @ApiImplicitParam(name = "cfgDTO", value = "系统配置信息", required = true, dataType = "VideoSysCfgDTO", dataTypeClass = VideoSysCfgDTO.class)
     @PostMapping("/add")
     public ResponseResult<Object> add(@RequestBody VideoSysCfgDTO cfgDTO) {
         try {
@@ -53,7 +53,7 @@ public class SysConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "修改系统配置")
-    @ApiImplicitParam(name = "cfgDTO", value = "系统配置信息", required = true)
+    @ApiImplicitParam(name = "cfgDTO", value = "系统配置信息", required = true, dataType = "VideoSysCfgDTO", dataTypeClass = VideoSysCfgDTO.class)
     @PostMapping("/update")
     public ResponseResult<Object> update(@RequestBody VideoSysCfgDTO cfgDTO) {
         try {
@@ -71,7 +71,7 @@ public class SysConfigController {
      * @return 操作结果
      */
     @ApiOperation(value = "删除系统配置")
-    @ApiImplicitParam(name = "id", value = "系统配置id", required = true)
+    @ApiImplicitParam(name = "id", value = "系统配置id", required = true, dataType = "String", dataTypeClass = String.class)
     @GetMapping("/delete/{id}")
     public ResponseResult<Object> delete(@PathVariable String id) {
         try {

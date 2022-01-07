@@ -49,11 +49,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="comments" jdbcType="VARCHAR" property="comments"/>
-        <collection property="pictureDTOList" ofType="java.util.HashMap">
+        <collection property="pictureList" ofType="java.util.HashMap">
             <id column="p_id" jdbcType="VARCHAR" property="id"/>
             <result column="p_url" jdbcType="VARCHAR" property="url"/>
         </collection>
-        <collection property="downloadLinkDTOList" ofType="java.util.HashMap">
+        <collection property="linkList" ofType="java.util.HashMap">
             <id column="d_id" jdbcType="VARCHAR" property="id"/>
             <result column="d_url" jdbcType="VARCHAR" property="url"/>
             <result column="d_name" jdbcType="VARCHAR" property="name"/>
@@ -74,6 +74,7 @@
                 years=#{dto.years},summary=#{dto.summary},status=#{dto.status}
         where id=#{dto.id}
     </update>
+
     <select id="detail" parameterType="java.lang.String" resultMap="DetailMap">
         SELECT
             t2.id, t2.`name`, t2.category, t2.`categoryName`, t2.`regionName`,
@@ -150,6 +151,8 @@
             `video_filter_cfg` t4
         on
             t3.region = t4.key
+        order by
+            t3.is_top desc, t3.status, t3.category, t3.create_time desc
     </select>
 
     <select id="count" parameterType="com.video.dto.business.VideoDTO" resultType="java.lang.Integer">
@@ -183,4 +186,149 @@
         </where>
     </select>
 
+    <update id="top">
+        update
+            `video`
+        set
+            is_top = #{status}
+        where
+            id = #{id}
+    </update>
+
+    <update id="switchStatusBatch">
+        update
+            `video`
+        set
+            `status` = #{status}
+        where
+            id in
+            <foreach collection="idArr" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </update>
+
+    <delete id="deleteBatch">
+        delete from
+            `video`
+        where
+            id in
+            <foreach collection="idArr" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </delete>
+
+    <select id="getDeleteInfo" resultType="com.video.dto.business.DeleteInfoDTO">
+        SELECT
+            t2.id, t2.videoName, t2.picName, t2.picUrl, GROUP_CONCAT(t3.name) as `linkName`, GROUP_CONCAT(t3.url) as `linkUrl`
+        FROM (
+                select
+                    t1.id, t1.name as `videoName`, GROUP_CONCAT(t2.name) as `picName`, GROUP_CONCAT(t2.url) as `picUrl`
+                from (
+                    select
+                        id, `name`
+                    from
+                        `video`
+                    where
+                        id in
+                        <foreach collection="idArr" item="id" open="(" close=")" separator=",">
+                            #{id}
+                        </foreach>
+            ) t1
+            left join `video_picture` t2 on t1.id = t2.video_id
+            group by t1.id
+        ) t2
+        left join `video_download_link` t3 on t2.id = t3.video_id
+        group by t2.id
+    </select>
+
+    <select id="searchAppList" parameterType="com.video.dto.business.AppQueryParam" resultType="com.video.dto.business.AppQueryResult">
+        SELECT
+            t3.id, t3.name, t3.categoryName, t4.url as 'picUrl'
+        FROM
+            (
+                select
+                    t1.id, t1.name, t2.key as 'category', t2.value as 'categoryName'
+                from
+                     (
+                        select
+                            t.id, t.name
+                        from
+                            video t
+                        <where>
+                            t.status = 1
+                            <if test="dto.name != null and dto.name != ''">
+                                and t.name like CONCAT('%', #{dto.name}, '%')
+                            </if>
+                            <if test="dto.category != null and dto.category != ''">
+                                and t.category = #{dto.category}
+                            </if>
+                            <if test="dto.type != null and dto.type != ''">
+                                and t.type like CONCAT('%', #{dto.type}, '%')
+                            </if>
+                            <if test="dto.region != null and dto.region != ''">
+                                and t.region like CONCAT('%', #{dto.region}, '%')
+                            </if>
+                            <choose>
+                                <when test="dto.isTop == '0'.toString()">
+                                    and t.is_top = 0
+                                </when>
+                                <otherwise>
+                                    and t.is_top = 1
+                                </otherwise>
+                            </choose>
+                        </where>
+                        order by
+                            t.create_time desc
+                        <if test="dto.startIdx != null and dto.pageSize != null">
+                            limit #{dto.startIdx}, #{dto.pageSize}
+                        </if>
+                    ) t1
+                left join
+                    video_filter_cfg t2
+                on
+                    t1.category = t2.key
+            ) t3
+        left join
+            (
+                SELECT
+                    p.*
+                from
+                    (
+                        SELECT
+                            video_id, url, order_no
+                        FROM
+                            video_picture
+                        order by
+                            video_id, order_no
+                    ) p
+                GROUP BY
+                    p.video_id
+            )t4
+        on
+            t3.id = t4.video_id
+    </select>
+
+    <resultMap id="appDetail" type="com.video.dto.business.AppDetailInfo">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="years" column="years" />
+        <result property="summary" column="summary" />
+        <collection property="pictureList" column="id" javaType="list" select="getPicList"/>
+    </resultMap>
+    
+    <select id="getAppDetail" resultMap="appDetail">
+        select id, name, years, summary from video where id = #{id} and status = 1;
+    </select>
+
+    <select id="getPicList" parameterType="java.lang.Integer" resultType="com.video.dto.business.app.Picture">
+        select id, url from video_picture where video_id = #{id}
+    </select>
+
+    <select id="getCommentById" resultType="com.video.dto.business.app.Comment">
+        select id, user_name as 'userName', content, AVG(score) as 'score' from video_comment where id = #{id} and status = 1;
+    </select>
+
+    <select id="setLinkList" resultType="com.video.dto.business.app.DownloadLink">
+        select id, name, url from video_download_link where id = #{id} and status = 1;
+    </select>
 </mapper>
