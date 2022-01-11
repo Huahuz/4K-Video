@@ -124,4 +124,37 @@
         </choose>
     </select>
 
+    <select id="getInfoById" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"></include>
+        from
+            video_filter_cfg
+        where
+            id = #{id}
+    </select>
+
+    <update id="updateVideoType">
+        update
+            video
+        set
+            type = replace(type, #{oldKey}, #{newKey})
+    </update>
+
+    <update id="updateVideoCategory">
+        update
+            video
+        set
+            category = #{newKey}
+        where
+            category = #{oldKey}
+    </update>
+
+    <update id="updateVideoRegion">
+        update
+            video
+        set
+            region = #{newKey}
+        where
+            region = #{oldKey}
+    </update>
 </mapper>

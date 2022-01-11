@@ -49,11 +49,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="comments" jdbcType="VARCHAR" property="comments"/>
-        <collection property="infoPictureList" ofType="com.video.dto.business.InfoPicture">
+        <collection property="pictureList" ofType="com.video.dto.business.InfoPicture">
             <id column="p_id" jdbcType="VARCHAR" property="id"/>
             <result column="p_url" jdbcType="VARCHAR" property="url"/>
         </collection>
-        <collection property="infoDownLoadLinkList" ofType="com.video.dto.business.InfoDownLoadLink">
+        <collection property="linkList" ofType="com.video.dto.business.InfoDownLoadLink">
             <id column="d_id" jdbcType="VARCHAR" property="id"/>
             <result column="d_url" jdbcType="VARCHAR" property="url"/>
             <result column="d_name" jdbcType="VARCHAR" property="name"/>
@@ -61,9 +61,19 @@
     </resultMap>
 
     <insert id="add" parameterType="com.video.dto.business.VideoDetailDTO" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
-        INSERT INTO video(name,category,region,`type`,years, summary,status)
-        values (#{dto.name},#{dto.category},#{dto.region},#{dto.type},
-                #{dto.years},#{dto.summary},#{dto.status})
+        INSERT INTO video(name,category,region,`type`,years, summary,status,create_time)
+        values (
+                #{dto.name},#{dto.category},#{dto.region},#{dto.type},
+                #{dto.years},#{dto.summary},#{dto.status},
+                <choose>
+                    <when test="dto.createTime != null">
+                        #{dto.createTime}
+                    </when>
+                    <otherwise>
+                        now()
+                    </otherwise>
+                </choose>
+        )
 
     </insert>
 
@@ -94,7 +104,7 @@
                  LEFT JOIN video_filter_cfg f2 ON t1.category = f2.KEY
                  LEFT JOIN video_filter_cfg f3 ON INSTR( t1.type, f3.KEY )) t2
              LEFT JOIN video_picture p ON t2.id = p.video_id
-             LEFT JOIN video_download_link d ON t2.id=d.video_id and status=1;
+             LEFT JOIN video_download_link d ON t2.id=d.video_id;
     </select>
 
 
@@ -138,7 +148,7 @@
                             </if>
                         </where>
                         order by
-                            is_top desc, status, category, create_time desc
+                            is_top desc, status, create_time desc, category
                         <if test="dto.startIdx != null and dto.pageSize != null">
                             limit #{dto.startIdx}, #{dto.pageSize}
                         </if>
@@ -329,7 +339,30 @@
         select id, user_name as 'userName', content, AVG(score) as 'score' from video_comment where id = #{id} and status = 1;
     </select>
 
-    <select id="setLinkList" resultType="com.video.dto.business.app.DownloadLink">
+    <select id="getLinkById" resultType="com.video.dto.business.app.DownloadLink">
         select id, name, url from video_download_link where id = #{id} and status = 1;
+    </select>
+
+    <resultMap id="OldDataMap" type="com.video.dto.business.OldData">
+        <result property="date" column="date"/>
+        <result property="title" column="title"/>
+        <result property="category" column="category"/>
+        <result property="categoryName" column="categoryName"/>
+        <result property="content" column="content"/>
+        <collection property="meta" resultMap="MetaMap" />
+    </resultMap>
+    <resultMap id="MetaMap" type="java.util.Map">
+        <result property="key" column="meta_key"/>
+        <result property="value" column="meta_value"/>
+    </resultMap>
+    <select id="getOldData" resultMap="OldDataMap">
+        select
+            t1.id, t1.date, t1.title, t1.cagetory as 'category', t1.cagetory_name as 'categoryName', t1.content, t2.meta_key, t2.meta_value
+        from
+            `posts` t1
+        left join
+            `post_meta` t2
+        on
+            t1.id = t2.post_id
     </select>
 </mapper>

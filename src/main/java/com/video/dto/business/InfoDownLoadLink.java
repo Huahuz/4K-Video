@@ -32,4 +32,9 @@ public class InfoDownLoadLink {
      *视频图片url
      */
     String url;
+
+    /**
+     * 顺序
+     */
+    private Integer orderNo;
 }

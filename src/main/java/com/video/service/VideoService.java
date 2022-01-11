@@ -105,7 +105,6 @@ public interface VideoService {
      */
     AppDetailInfo appDetail(String id);
 
-
     /**
      * 前台页面个人资源添加
      * @param appAddInfo 视频资源信息
@@ -113,5 +112,8 @@ public interface VideoService {
      */
     void AppAdd(AppAddInfo appAddInfo) throws SQLException;
 
-
+    /**
+     * 数据迁移
+     */
+    void data();
 }

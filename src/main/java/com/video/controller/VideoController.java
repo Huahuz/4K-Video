@@ -268,7 +268,6 @@ public class VideoController {
         return videoService.appDetail(id);
     }
 
-
     /**
      * 前台页面个人资源添加
      * @param appAddInfo 视频资源信息
@@ -285,6 +284,19 @@ public class VideoController {
             return ResponseResult.failure();
         }
         return ResponseResult.success();
+    }
 
+    /**
+     * 仅供数据迁移用的接口，上线后注释掉
+     */
+    @ApiOperation("数据库迁移操作")
+    @GetMapping("/data")
+    public void data() {
+        videoService.data();
+    }
+
+    @GetMapping("/test")
+    public List<VideoResultDTO> test() {
+        return this.list(new VideoDTO()).getData().getData();
     }
 }

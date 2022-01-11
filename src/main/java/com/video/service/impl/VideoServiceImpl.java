@@ -16,9 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -151,7 +152,7 @@ public class VideoServiceImpl implements VideoService {
         Long id = dto.getId();
         String s = String.valueOf(dto.getId());
 
-        List<InfoPicture> infoPictureList = dto.getInfoPictureList();
+        List<InfoPicture> infoPictureList = dto.getPictureList();
         if(infoPictureList!=null){
             for (InfoPicture infoPicture : infoPictureList) {
                 VideoPictureDTO videoPictureDTO = new VideoPictureDTO();
@@ -159,22 +160,23 @@ public class VideoServiceImpl implements VideoService {
                 videoPictureDTO.setVideoId(s);
                 videoPictureDTO.setName(" ");
                 videoPictureDTO.setUrl(infoPicture.getUrl());
+                videoPictureDTO.setOrderNo(Objects.isNull(infoPicture.getOrderNo()) ? 0 : infoPicture.getOrderNo());
                 pictureService.add(videoPictureDTO);
 
             }
         }
 
 
-        List<InfoDownLoadLink> infoDownLoadLinkList = dto.getInfoDownLoadLinkList();
+        List<InfoDownLoadLink> infoDownLoadLinkList = dto.getLinkList();
         if (infoDownLoadLinkList!=null){
             for (InfoDownLoadLink infoDownLoadLink : infoDownLoadLinkList) {
                 VideoDownloadLinkDTO videoDownloadLinkDTO = new VideoDownloadLinkDTO();
                 videoDownloadLinkDTO.setId(infoDownLoadLink.getId());
                 videoDownloadLinkDTO.setVideoId(s);
                 videoDownloadLinkDTO.setName(infoDownLoadLink.getName());
-                videoDownloadLinkDTO.setUrl(infoDownLoadLink.getUrl());
+                videoDownloadLinkDTO.setUrl(StringUtils.isNotBlank(infoDownLoadLink.getUrl()) ? infoDownLoadLink.getUrl() : "未知");
                 videoDownloadLinkDTO.setStatus(0);
-                videoDownloadLinkDTO.setOrderNo(0);
+                videoDownloadLinkDTO.setOrderNo(infoDownLoadLink.getOrderNo() == null ? 0 : infoDownLoadLink.getOrderNo());
                 downloadLinkService.add(videoDownloadLinkDTO);
             }
         }
@@ -190,7 +192,7 @@ public class VideoServiceImpl implements VideoService {
         String s = String.valueOf(dto.getId());
         //读取要更新的图片信息
 
-        List<InfoPicture> infoPictureList = dto.getInfoPictureList();
+        List<InfoPicture> infoPictureList = dto.getPictureList();
         if (infoPictureList!=null){
             for (InfoPicture infoPicture : infoPictureList) {
                 VideoPictureDTO videoPictureDTO = new VideoPictureDTO();
@@ -213,7 +215,7 @@ public class VideoServiceImpl implements VideoService {
 
         }
 
-        List<InfoDownLoadLink> infoDownLoadLinkList = dto.getInfoDownLoadLinkList();
+        List<InfoDownLoadLink> infoDownLoadLinkList = dto.getLinkList();
         if (infoDownLoadLinkList !=null) {
             for (InfoDownLoadLink infoDownLoadLink : infoDownLoadLinkList) {
                 VideoDownloadLinkDTO videoDownloadLinkDTO = new VideoDownloadLinkDTO();
@@ -330,14 +332,137 @@ public class VideoServiceImpl implements VideoService {
         detailDTO.setStatus(0);
         detailDTO.setSummary("");
         //分类处理
-        if (videoId==""){
+        if (videoId == "") {
             //不存在该视频
             videoMapper.add(detailDTO);
             videoDownloadLinkDTO.setVideoId(detailDTO.getId().toString());
             downloadLinkService.add(videoDownloadLinkDTO);
-        }else {
+        } else {
             videoDownloadLinkDTO.setVideoId(videoId);
             downloadLinkService.add(videoDownloadLinkDTO);
+        }
+    }
+
+    @Override
+    public void data() {
+        try {
+            // 从数据库中读取原来的数据信息
+            List<OldData> oldDataList = videoMapper.getOldData();
+
+            for (OldData oldData : oldDataList) {
+                VideoDetailDTO detailDTO = new VideoDetailDTO();
+                detailDTO.setName(oldData.getTitle());
+                String categoryName = "";
+                switch (oldData.getCategory()) {
+                    case 1:
+                        categoryName = "movie";
+                        break;
+                    case 6:
+                        categoryName = "tv";
+                        break;
+                    case 7:
+                        categoryName = "documentary";
+                        break;
+                    case 8:
+                        categoryName = "concert";
+                        break;
+                    case 9:
+                        categoryName = "tools";
+                        break;
+                    case 10:
+                        categoryName = "4kbaike";
+                        break;
+                }
+                detailDTO.setCategory(categoryName);
+                detailDTO.setCreateTime(oldData.getDate());
+                detailDTO.setStatus(1);
+                detailDTO.setRegion("unknown");
+                detailDTO.setType("type_unknown");
+                detailDTO.setYears(1900);
+
+                String strHtml = oldData.getContent();
+                // 解析html中的图片信息
+                List<InfoPicture> pics = new ArrayList<>();
+                String regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+                Pattern p_image = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
+                Matcher m_image = p_image.matcher(strHtml);
+                int order = 0;
+                while (m_image.find()) {
+                    // 得到<img />数据
+                    String img = m_image.group();
+                    // 匹配<img>中的src数据
+                    Matcher m = Pattern.compile("src\\s*=\\s*\"?(.*?)(\"|>|\\s+)").matcher(img);
+                    while (m.find()) {
+                        String url = m.group(1);
+                        // 去除部分url中的空格及样式,及前缀拼接
+                        int index = url.lastIndexOf(" ");
+                        if (index != -1) {
+                            url = url.substring(0, index);
+                        }
+                        url = url.substring(url.lastIndexOf("/") + 1);
+                        InfoPicture picture = new InfoPicture();
+                        picture.setUrl(url);
+                        picture.setOrderNo(order++);
+                        pics.add(picture);
+                    }
+                }
+                detailDTO.setPictureList(pics);
+
+                // 去除html标签和标题到空格符的文本数据及剩余的回车符和空格符
+                String txt = strHtml.replaceAll("</?[^>]+>", "");
+                txt = txt.replaceAll("\r\n", "");
+                int index = txt.lastIndexOf("&nbsp;");
+                if (index != -1) {
+                    txt = txt.substring(index + 6);
+                }
+                detailDTO.setSummary(txt);
+
+                Map<String, String> metaMap = new HashMap<>();
+                for (Map<String, String> meta : oldData.getMeta()) {
+                    metaMap.put(meta.get("key"), meta.get("value"));
+                }
+                List<InfoDownLoadLink> links = Lists.newArrayList();
+                if (StringUtils.isNotBlank(metaMap.get("xzname1"))) {
+                    InfoDownLoadLink link = new InfoDownLoadLink();
+                    link.setName(metaMap.get("xzname1"));
+                    link.setUrl(metaMap.get("xzurl1"));
+                    link.setOrderNo(0);
+                    links.add(link);
+                }
+                if (StringUtils.isNotBlank(metaMap.get("xzname2"))) {
+                    InfoDownLoadLink link = new InfoDownLoadLink();
+                    link.setName(metaMap.get("xzname2"));
+                    link.setUrl(metaMap.get("xzurl2"));
+                    link.setOrderNo(1);
+                    links.add(link);
+                }
+                if (StringUtils.isNotBlank(metaMap.get("xzname3"))) {
+                    InfoDownLoadLink link = new InfoDownLoadLink();
+                    link.setName(metaMap.get("xzname3"));
+                    link.setUrl(metaMap.get("xzurl3"));
+                    link.setOrderNo(2);
+                    links.add(link);
+                }
+                if (StringUtils.isNotBlank(metaMap.get("xzname4"))) {
+                    InfoDownLoadLink link = new InfoDownLoadLink();
+                    link.setName(metaMap.get("xzname4"));
+                    link.setUrl(metaMap.get("xzurl4"));
+                    link.setOrderNo(3);
+                    links.add(link);
+                }
+                if (StringUtils.isNotBlank(metaMap.get("xzname5"))) {
+                    InfoDownLoadLink link = new InfoDownLoadLink();
+                    link.setName(metaMap.get("xzname5"));
+                    link.setUrl(metaMap.get("xzurl5"));
+                    link.setOrderNo(4);
+                    links.add(link);
+                }
+                detailDTO.setLinkList(links);
+                this.add(detailDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
     }
 }
