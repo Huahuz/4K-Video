@@ -3,6 +3,7 @@ package com.video.dto.business;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -85,25 +86,25 @@ public class VideoDetailDTO{
      *创建时间
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime;
+    private LocalDateTime createTime;
 
 
     /**
      *更新时间
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 视频对应的图片信息
      */
-    private List<InfoPicture> infoPictureList;
+    private List<InfoPicture> pictureList;
 
 
     /**
      * 视频对应的链接信息
      */
-    private List<InfoDownLoadLink> infoDownLoadLinkList;
+    private List<InfoDownLoadLink> linkList;
 
 
 }

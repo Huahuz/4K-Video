@@ -47,7 +47,7 @@
     </if>
     </where>
     order by
-    order_no asc, create_time desc
+        video_id, order_no asc, create_time desc
     <if test="dto.startIdx != null and dto.pageSize != null">
       limit #{dto.startIdx}, #{dto.pageSize}
     </if>

@@ -107,4 +107,10 @@ public interface VideoMapper {
      * @return 查询结果
      */
     List<DownloadLink> getLinkById(@Param("id") String id);
+
+    /**
+     * 仅用作查询原有数据的接口
+     * @return 旧数据
+     */
+    List<OldData> getOldData();
 }

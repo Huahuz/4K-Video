@@ -27,4 +27,9 @@ public class InfoPicture {
      *视频图片url
      */
     String url;
+
+    /**
+     * 排序
+     */
+    private Integer orderNo;
 }

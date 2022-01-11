@@ -8,6 +8,7 @@ import com.video.util.TransformUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -34,7 +35,25 @@ public class FilterConfigServiceImpl implements FilterConfigService {
     }
 
     @Override
+    @Transactional
     public void update(VideoFilterCfgDTO cfgDTO) throws SQLException {
+        // 查询原来的配置信息
+        VideoFilterCfg old = cfgMapper.getInfoById(cfgDTO.getId());
+        String oldKey = old.getKey();
+        String newKey = cfgDTO.getKey();
+        // 更新视频表对应的key值
+        // 配置项类型，0为类型项配置 1为类别项配置 2为地区项配置
+        switch (cfgDTO.getType()) {
+            case 0:
+                cfgMapper.updateVideoType(oldKey, newKey);
+                break;
+            case 1:
+                cfgMapper.updateVideoCategory(oldKey, newKey);
+                break;
+            case 2:
+                cfgMapper.updateVideoRegion(oldKey, newKey);
+                break;
+        }
         cfgMapper.updateById(cfgDTO);
     }
 

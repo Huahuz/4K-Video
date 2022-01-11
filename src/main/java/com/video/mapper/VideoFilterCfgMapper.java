@@ -66,4 +66,32 @@ public interface VideoFilterCfgMapper {
      * @throws SQLException sql异常
      */
     List<VideoFilterCfg> selectOptions(@Param("parentId") String parentId, @Param("key") String key, @Param("type") Integer type) throws SQLException;
+
+    /**
+     * 根据id查询配置信息
+     * @param id 配置id
+     * @return 配置信息
+     */
+    VideoFilterCfg getInfoById(@Param("id") String id);
+
+    /**
+     * 更新视频表的类型键的值
+     * @param oldKey 旧值
+     * @param newKey 新值
+     */
+    void updateVideoType(@Param("oldKey") String oldKey, @Param("newKey") String newKey);
+
+    /**
+     * 更新视频表的类型键的值
+     * @param oldKey 旧值
+     * @param newKey 新值
+     */
+    void updateVideoCategory(@Param("oldKey") String oldKey, @Param("newKey") String newKey);
+
+    /**
+     * 更新视频表的类型键的值
+     * @param oldKey 旧值
+     * @param newKey 新值
+     */
+    void updateVideoRegion(@Param("oldKey") String oldKey, @Param("newKey") String newKey);
 }
