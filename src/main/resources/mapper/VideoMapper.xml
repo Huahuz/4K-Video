@@ -49,11 +49,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="comments" jdbcType="VARCHAR" property="comments"/>
-        <collection property="pictureList" ofType="java.util.HashMap">
+        <collection property="infoPictureList" ofType="com.video.dto.business.InfoPicture">
             <id column="p_id" jdbcType="VARCHAR" property="id"/>
             <result column="p_url" jdbcType="VARCHAR" property="url"/>
         </collection>
-        <collection property="linkList" ofType="java.util.HashMap">
+        <collection property="infoDownLoadLinkList" ofType="com.video.dto.business.InfoDownLoadLink">
             <id column="d_id" jdbcType="VARCHAR" property="id"/>
             <result column="d_url" jdbcType="VARCHAR" property="url"/>
             <result column="d_name" jdbcType="VARCHAR" property="name"/>
@@ -61,9 +61,10 @@
     </resultMap>
 
     <insert id="add" parameterType="com.video.dto.business.VideoDetailDTO" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
-        INSERT INTO video
-            SET `name`=#{dto.name},category=#{dto.category},region=#{dto.region},`type`=#{dto.type},
-                years=#{dto.years},summary=#{dto.summary},status=#{dto.status}
+        INSERT INTO video(name,category,region,`type`,years, summary,status)
+        values (#{dto.name},#{dto.category},#{dto.region},#{dto.type},
+                #{dto.years},#{dto.summary},#{dto.status})
+
     </insert>
 
     <update id="update" parameterType="com.video.dto.business.VideoDetailDTO" keyProperty="id" keyColumn="id"
@@ -83,17 +84,17 @@
             p.id as `p_id`, p.url as `p_url`,
             d.id as `d_id`,d.url as `d_url`,d.`name` as `d_name`
         FROM
-            (SELECT
-                 t1.id,t1.`name`,t1.category,t1.type,t1.region,t1.years,t1.`status`,
-                 t1.is_top,t1.summary,t1.create_time,t1.update_time,t1.comments,
-                 f2.`value` AS `categoryName`,f1.`value` AS `regionName`
-             FROM
-                     ( SELECT * FROM video WHERE id = #{id} ) t1
-                         LEFT JOIN video_filter_cfg f1 ON t1.region = f1.KEY
-                         LEFT JOIN video_filter_cfg f2 ON t1.category = f2.KEY
-                         LEFT JOIN video_filter_cfg f3 ON INSTR( t1.type, f3.KEY )) t2
-                LEFT JOIN video_picture p ON t2.id = p.video_id
-                LEFT JOIN video_download_link d ON  t2.id=d.video_id;
+        (SELECT
+             t1.id,t1.`name`,t1.category,t1.type,t1.region,t1.years,t1.`status`,
+             t1.is_top,t1.summary,t1.create_time,t1.update_time,t1.comments,
+             f2.`value` AS `categoryName`,f1.`value` AS `regionName`
+         FROM
+             (SELECT * FROM video WHERE id = #{id}) t1
+                 LEFT JOIN video_filter_cfg f1 ON t1.region = f1.KEY
+                 LEFT JOIN video_filter_cfg f2 ON t1.category = f2.KEY
+                 LEFT JOIN video_filter_cfg f3 ON INSTR( t1.type, f3.KEY )) t2
+             LEFT JOIN video_picture p ON t2.id = p.video_id
+             LEFT JOIN video_download_link d ON t2.id=d.video_id and status=1;
     </select>
 
 

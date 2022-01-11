@@ -1,5 +1,7 @@
 package com.video.dto.business;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.video.dto.common.PageParam;
 import lombok.*;
 import org.apache.ibatis.annotations.Param;
@@ -41,11 +43,11 @@ public class VideoDownloadLinkDTO extends PageParam{
     /**
      * 同一视频链接顺序
      */
-    private int orderNo;
+    private Integer orderNo;
 
     /**
      * 链接状态，未发布、已发布、已冻结
      */
-    private int status;
+    private Integer status;
 
 }

@@ -1,15 +1,14 @@
 package com.video.dto.business;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.video.dto.common.PageParam;
 import lombok.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 
 /**
- * description: 单条视频信息详细查询结果实体传输类
+ * description: 单条视频信息详细的实体传输类
  *
  * @author fxx
  * @version 1.0
@@ -98,11 +97,13 @@ public class VideoDetailDTO{
     /**
      * 视频对应的图片信息
      */
-    private List<Map<String, Object>> pictureList;
+    private List<InfoPicture> infoPictureList;
+
 
     /**
      * 视频对应的链接信息
      */
-    private List<Map<String, Object>> linkList;
+    private List<InfoDownLoadLink> infoDownLoadLinkList;
+
 
 }

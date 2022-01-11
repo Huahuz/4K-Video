@@ -2,7 +2,7 @@ spring:
   application:
     name: 4k-video
   datasource:
-    url: jdbc:mysql://192.168.1.201:3306/4k_video?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
+    url: jdbc:mysql://localhost:3306/4k_video?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
