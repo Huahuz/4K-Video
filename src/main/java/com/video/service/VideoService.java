@@ -104,4 +104,14 @@ public interface VideoService {
      * @return 视频详情
      */
     AppDetailInfo appDetail(String id);
+
+
+    /**
+     * 前台页面个人资源添加
+     * @param appAddInfo 视频资源信息
+     * @return 视频详情
+     */
+    void AppAdd(AppAddInfo appAddInfo) throws SQLException;
+
+
 }

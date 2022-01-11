@@ -187,7 +187,7 @@ public class VideoController {
     @ApiOperation("视频新增")
     @ApiImplicitParam(name = "videoDetailDTO", value = "新增信息", required = true, dataType = "VideoDetailDTO", dataTypeClass = VideoDetailDTO.class)
     @PostMapping("/add")
-    public ResponseResult<Object> detail(@RequestBody VideoDetailDTO videoDetailDTO){
+    public ResponseResult<Object> add(@RequestBody VideoDetailDTO videoDetailDTO){
 
         try {
             videoDetailDTO.setStatus(0);
@@ -204,7 +204,7 @@ public class VideoController {
      * @param videoDetailDTO 视频信息
      * @return 操作结果
      */
-    @ApiOperation("视频修改")
+    @ApiOperation("视频信息修改")
     @ApiImplicitParam(name = "videoDetailDTO", value = "修改信息", required = true, dataType = "VideoDetailDTO", dataTypeClass = VideoDetailDTO.class)
     @PostMapping("/update")
     public ResponseResult<Object> update(@RequestBody VideoDetailDTO videoDetailDTO) {
@@ -266,5 +266,25 @@ public class VideoController {
     @GetMapping("/app/{id}/detail")
     public AppDetailInfo appDetail(@PathVariable("id") String id) {
         return videoService.appDetail(id);
+    }
+
+
+    /**
+     * 前台页面个人资源添加
+     * @param appAddInfo 视频资源信息
+     * @return 视频详情
+     */
+    @ApiOperation("前台页面个人资源添加")
+    @ApiImplicitParam(name = "appAddInfo", value = " 要添加的视频资源", required = true, dataType = "AppAddInfo", dataTypeClass = AppAddInfo.class)
+    @PostMapping("/app/add")
+    public ResponseResult<Object> appAdd(@RequestBody AppAddInfo appAddInfo) {
+        try {
+            videoService.AppAdd(appAddInfo);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+
     }
 }

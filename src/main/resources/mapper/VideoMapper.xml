@@ -94,7 +94,7 @@
                  LEFT JOIN video_filter_cfg f2 ON t1.category = f2.KEY
                  LEFT JOIN video_filter_cfg f3 ON INSTR( t1.type, f3.KEY )) t2
              LEFT JOIN video_picture p ON t2.id = p.video_id
-             LEFT JOIN video_download_link d ON  t2.id=d.video_id;
+             LEFT JOIN video_download_link d ON t2.id=d.video_id and status=1;
     </select>
 
 

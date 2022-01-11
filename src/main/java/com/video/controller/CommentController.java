@@ -1,6 +1,7 @@
 package com.video.controller;
 
 import com.video.dto.business.VideoCommentDTO;
+import com.video.dto.business.app.Comment;
 import com.video.dto.common.Page;
 import com.video.dto.common.ResponseResult;
 import com.video.service.CommentService;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.time.LocalDateTime.now;
 
 /**
  * description: 评论功能控制器
@@ -156,4 +160,59 @@ public class CommentController {
             return ResponseResult.failure();
         }
     }
+
+    /**
+     * 小程序新增评论
+     * @param comment 评论信息
+     * @return 视频详情
+     */
+    @ApiOperation("小程序新增评论")
+    @ApiImplicitParam(name = "comment", value = "新增评论信息", required = true, dataType = "Comment", dataTypeClass = Comment.class)
+    @PostMapping("/app/add")
+    public ResponseResult<Object> appAdd(@RequestBody Comment comment) {
+        VideoCommentDTO videoCommentDTO = new VideoCommentDTO();
+        videoCommentDTO.setVideoId(comment.getId());
+        videoCommentDTO.setScore(comment.getScore());
+        videoCommentDTO.setContent(comment.getContent());
+        videoCommentDTO.setUserName(comment.getUserName());
+        videoCommentDTO.setIsComplaint(0);
+        videoCommentDTO.setStatus(0);
+        videoCommentDTO.setCommentTime(now());
+
+        try {
+            commentService.add(videoCommentDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
+    /**
+     * 投诉建议添加
+     * @param comment 投诉信息
+     * @return 视频详情
+     */
+    @ApiOperation("投诉建议添加")
+    @ApiImplicitParam(name = "comment", value = "投诉信息", required = true, dataType = "Comment", dataTypeClass = Comment.class)
+    @PostMapping("/app/complaint")
+    public ResponseResult<Object> appComplaint(@RequestBody Comment comment) {
+        VideoCommentDTO videoCommentDTO = new VideoCommentDTO();
+        videoCommentDTO.setVideoId(comment.getId());
+        videoCommentDTO.setScore(comment.getScore());
+        videoCommentDTO.setContent(comment.getContent());
+        videoCommentDTO.setUserName(comment.getUserName());
+        videoCommentDTO.setIsComplaint(1);
+        videoCommentDTO.setStatus(0);
+        videoCommentDTO.setCommentTime(now());
+
+        try {
+            commentService.add(videoCommentDTO);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+        return ResponseResult.success();
+    }
+
 }
